@@ -76,6 +76,19 @@ export const saveCustomTemplate = (template: Template): void => {
 };
 
 /**
+ * Delete a custom template from storage
+ */
+export const deleteCustomTemplate = (templateId: string): void => {
+	try {
+		const customTemplates = getCustomTemplates();
+		const filtered = customTemplates.filter((t) => t.id !== templateId);
+		localStorage.setItem(TEMPLATES_KEY, JSON.stringify(filtered));
+	} catch (error) {
+		console.error("Error deleting template from storage:", error);
+	}
+};
+
+/**
  * Get only custom templates (not defaults)
  */
 export const getCustomTemplates = (): Template[] => {

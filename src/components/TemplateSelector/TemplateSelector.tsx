@@ -11,6 +11,8 @@ interface TemplateSelectorProps {
 	templates: Template[];
 	currentTemplateId: string;
 	onTemplateSelect: (templateId: string) => void;
+	onTemplateDelete: (templateId: string) => void;
+	isDefaultTemplate: (templateId: string) => boolean;
 	hasUnsavedChanges?: boolean;
 }
 
@@ -18,6 +20,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 	templates,
 	currentTemplateId,
 	onTemplateSelect,
+	onTemplateDelete,
+	isDefaultTemplate,
 	hasUnsavedChanges = false,
 }) => {
 	const [showConfirm, setShowConfirm] = useState(false);
@@ -46,13 +50,29 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 			<h3>Templates</h3>
 			<div className="template-buttons">
 				{templates.map((template) => (
-					<button
-						key={template.id}
-						className={`template-btn ${currentTemplateId === template.id ? "active" : ""}`}
-						onClick={() => handleTemplateClick(template.id)}
-					>
-						{template.name}
-					</button>
+					<div key={template.id} className="template-item">
+						<button
+							className={`template-btn ${currentTemplateId === template.id ? "active" : ""}`}
+							onClick={() => handleTemplateClick(template.id)}
+						>
+							{template.name}
+						</button>
+						{!isDefaultTemplate(template.id) && (
+							<button
+								className="delete-template-btn"
+								onClick={() => {
+									if (
+										confirm(`"${template.name}" template'ini silmek istediğinizden emin misiniz?`)
+									) {
+										onTemplateDelete(template.id);
+									}
+								}}
+								title="Template'i sil"
+							>
+								✕
+							</button>
+						)}
+					</div>
 				))}
 			</div>
 

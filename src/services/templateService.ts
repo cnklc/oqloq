@@ -11,6 +11,7 @@ import {
 	setCurrentTemplateId,
 	saveBlocks,
 	saveCustomTemplate,
+	deleteCustomTemplate,
 } from "./storageService";
 
 /**
@@ -71,4 +72,25 @@ export const getAllTemplates = (): Template[] => {
  */
 export const getDefaultTemplates = (): Template[] => {
 	return DEFAULT_TEMPLATES;
+};
+
+/**
+ * Delete a custom template
+ * Cannot delete default templates
+ */
+export const deleteTemplate = (templateId: string): boolean => {
+	// Cannot delete default templates
+	if (DEFAULT_TEMPLATES.some((t) => t.id === templateId)) {
+		return false;
+	}
+
+	deleteCustomTemplate(templateId);
+	return true;
+};
+
+/**
+ * Check if a template is a default template
+ */
+export const isDefaultTemplate = (templateId: string): boolean => {
+	return DEFAULT_TEMPLATES.some((t) => t.id === templateId);
 };

@@ -15,6 +15,8 @@ import {
 	getCurrentTemplate,
 	getAllTemplates,
 	createTemplateFromBlocks,
+	deleteTemplate,
+	isDefaultTemplate,
 } from "../services/templateService";
 import { minutesToTimeString, isTimeInBlock } from "../services/clockService";
 import "./Dashboard.css";
@@ -83,6 +85,19 @@ export const Dashboard: React.FC = () => {
 		alert(`"${newTemplate.name}" template olarak kaydedildi!`);
 	};
 
+	const handleDeleteTemplate = (templateId: string) => {
+		const deleted = deleteTemplate(templateId);
+		if (deleted) {
+			// If deleted template was active, switch to student template
+			if (currentTemplateId === templateId) {
+				const newBlocks = switchTemplate("student");
+				setBlocks(newBlocks);
+				setCurrentTemplateId("student");
+			}
+			setTemplates(getAllTemplates());
+		}
+	};
+
 	const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
 	const selectedStartMinute = selectedBlock
 		? selectedBlock.startMinute
@@ -119,6 +134,8 @@ export const Dashboard: React.FC = () => {
 						templates={templates}
 						currentTemplateId={currentTemplateId}
 						onTemplateSelect={handleTemplateSwitch}
+						onTemplateDelete={handleDeleteTemplate}
+						isDefaultTemplate={isDefaultTemplate}
 						hasUnsavedChanges={false}
 					/>
 
