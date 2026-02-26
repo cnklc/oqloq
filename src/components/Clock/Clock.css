@@ -1,0 +1,72 @@
+/* Clock Component Styles */
+
+.clock-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.clock-svg {
+	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+	max-width: 100%;
+	height: auto;
+}
+
+.hour-label {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: 500;
+	font-size: 14px;
+}
+
+.block-segment {
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.block-segment.hovered path {
+	filter: brightness(0.95);
+}
+
+.block-segment.selected path {
+	filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) brightness(0.95);
+	stroke-width: 2;
+}
+
+.block-label {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	transition: opacity 0.2s ease;
+}
+
+.time-hand {
+	animation: rotate 86400s linear infinite;
+	transform-origin: 50% 50%;
+	transform-box: fill-box;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (max-width: 600px) {
+	.clock-container {
+		max-width: 100%;
+		padding: 20px;
+	}
+
+	.hour-label {
+		font-size: 11px;
+	}
+
+	.block-label {
+		font-size: 10px;
+	}
+}
