@@ -53,7 +53,9 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 	};
 
 	const handleToggleTodo = (todoId: string) => {
-		setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo)));
+		setTodos(
+			todos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo))
+		);
 	};
 
 	const handleDeleteTodo = (todoId: string) => {

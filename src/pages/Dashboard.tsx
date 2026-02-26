@@ -178,6 +178,15 @@ export const Dashboard: React.FC = () => {
 					</div>
 				</main>
 
+				<aside className="todos-panel">
+					<ActiveBlockTodos
+						activeBlock={activeBlock || null}
+						onAddTodo={handleAddTodo}
+						onToggleTodo={handleToggleTodo}
+						onDeleteTodo={handleDeleteTodo}
+					/>
+				</aside>
+
 				<aside className="sidebar">
 					<TemplateSelector
 						templates={templates}
@@ -285,15 +294,6 @@ export const Dashboard: React.FC = () => {
 						</div>
 					)}
 				</aside>
-
-			<aside className="todos-panel">
-				<ActiveBlockTodos
-					activeBlock={activeBlock || null}
-					onAddTodo={handleAddTodo}
-					onToggleTodo={handleToggleTodo}
-					onDeleteTodo={handleDeleteTodo}
-				/>
-			</aside>
 			</div>
 		</div>
 	);
