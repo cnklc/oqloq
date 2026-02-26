@@ -60,11 +60,11 @@
 /* Main content */
 .dashboard-content {
 	display: grid;
-	grid-template-columns: 1fr 380px;
+	grid-template-columns: 1fr 380px 320px;
 	gap: 32px;
 	padding: 40px 24px;
 	flex: 1;
-	max-width: 1400px;
+	max-width: 1600px;
 	margin: 0 auto;
 	width: 100%;
 }
@@ -235,15 +235,50 @@
 	color: #333;
 }
 
+/* Todos Panel */
+.todos-panel {
+	display: flex;
+	flex-direction: column;
+	max-height: calc(100vh - 250px);
+	overflow-y: auto;
+}
+
+.todos-panel::-webkit-scrollbar {
+	width: 6px;
+}
+
+.todos-panel::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 10px;
+}
+
+.todos-panel::-webkit-scrollbar-thumb {
+	background: #d0d0d0;
+	border-radius: 10px;
+}
+
+.todos-panel::-webkit-scrollbar-thumb:hover {
+	background: #999;
+}
+
+.todos-panel {
+	scrollbar-width: thin;
+	scrollbar-color: #d0d0d0 #f1f1f1;
+}
+
 /* Responsive design */
 @media (max-width: 1024px) {
 	.dashboard-content {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr 320px;
 		gap: 24px;
 		padding: 24px 16px;
 	}
 
 	.sidebar {
+		max-height: none;
+	}
+
+	.todos-panel {
 		max-height: none;
 	}
 
@@ -298,6 +333,11 @@
 
 	.sidebar {
 		gap: 16px;
+		max-height: none;
+	}
+
+	.todos-panel {
+		max-height: none;
 	}
 
 	.clock-wrapper {
@@ -305,8 +345,3 @@
 	}
 }
 
-/* Scrollbar styling for Firefox */
-.sidebar {
-	scrollbar-width: thin;
-	scrollbar-color: #d0d0d0 #f1f1f1;
-}

@@ -4,12 +4,13 @@
  */
 
 import React, { useState } from "react";
-import type { RoutineBlock, Template } from "../types/models";
+import type { RoutineBlock, Template, Todo } from "../types/models";
 import { useRoutineBlocks } from "../hooks/useRoutineBlocks";
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { Clock } from "../components/Clock/Clock";
 import { BlockEditor } from "../components/BlockEditor/BlockEditor";
 import { TemplateSelector } from "../components/TemplateSelector/TemplateSelector";
+import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
 import {
 	switchTemplate,
 	getCurrentTemplate,
@@ -96,6 +97,54 @@ export const Dashboard: React.FC = () => {
 			}
 			setTemplates(getAllTemplates());
 		}
+	};
+
+	const handleAddTodo = (blockId: string, todoText: string) => {
+		const block = blocks.find((b) => b.id === blockId);
+		if (!block) return;
+
+		const newTodo: Todo = {
+			id: `todo_${Date.now()}`,
+			text: todoText,
+			completed: false,
+		};
+
+		const updatedBlock: RoutineBlock = {
+			...block,
+			todos: [...(block.todos || []), newTodo],
+		};
+
+		updateBlock(blockId, updatedBlock);
+	};
+
+	const handleToggleTodo = (blockId: string, todoId: string) => {
+		const block = blocks.find((b) => b.id === blockId);
+		if (!block) return;
+
+		const updatedTodos = (block.todos || []).map((todo) =>
+			todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
+		);
+
+		const updatedBlock: RoutineBlock = {
+			...block,
+			todos: updatedTodos,
+		};
+
+		updateBlock(blockId, updatedBlock);
+	};
+
+	const handleDeleteTodo = (blockId: string, todoId: string) => {
+		const block = blocks.find((b) => b.id === blockId);
+		if (!block) return;
+
+		const updatedTodos = (block.todos || []).filter((todo) => todo.id !== todoId);
+
+		const updatedBlock: RoutineBlock = {
+			...block,
+			todos: updatedTodos,
+		};
+
+		updateBlock(blockId, updatedBlock);
 	};
 
 	const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
@@ -236,6 +285,15 @@ export const Dashboard: React.FC = () => {
 						</div>
 					)}
 				</aside>
+
+			<aside className="todos-panel">
+				<ActiveBlockTodos
+					activeBlock={activeBlock || null}
+					onAddTodo={handleAddTodo}
+					onToggleTodo={handleToggleTodo}
+					onDeleteTodo={handleDeleteTodo}
+				/>
+			</aside>
 			</div>
 		</div>
 	);

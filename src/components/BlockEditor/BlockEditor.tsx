@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from "react";
-import type { RoutineBlock } from "../../types/models";
+import type { RoutineBlock, Todo } from "../../types/models";
 import { COLOR_PALETTE } from "../../types/models";
 import {
 	minutesToTimeString,
@@ -36,6 +36,29 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 	const [endTime, setEndTime] = useState(
 		block ? minutesToTimeString(block.endMinute) : minutesToTimeString(initialStartMinute + 120)
 	);
+	const [todos, setTodos] = useState<Todo[]>(block?.todos || []);
+	const [newTodoText, setNewTodoText] = useState("");
+
+	const handleAddTodo = () => {
+		if (!newTodoText.trim()) return;
+
+		const newTodo: Todo = {
+			id: `todo_${Date.now()}`,
+			text: newTodoText.trim(),
+			completed: false,
+		};
+
+		setTodos([...todos, newTodo]);
+		setNewTodoText("");
+	};
+
+	const handleToggleTodo = (todoId: string) => {
+		setTodos(todos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo)));
+	};
+
+	const handleDeleteTodo = (todoId: string) => {
+		setTodos(todos.filter((todo) => todo.id !== todoId));
+	};
 
 	const handleSave = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -59,6 +82,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 			color,
 			startMinute,
 			endMinute,
+			todos,
 		};
 
 		onSave(savedBlock);
@@ -117,6 +141,48 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 							/>
 						))}
 					</div>
+				</div>
+
+				{/* Todo List Section */}
+				<div className="form-group">
+					<label>📝 Todo List</label>
+					<div className="todo-input-group">
+						<input
+							type="text"
+							placeholder="Yeni todo ekle..."
+							value={newTodoText}
+							onChange={(e) => setNewTodoText(e.target.value)}
+							onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
+						/>
+						<button type="button" className="btn-add-todo" onClick={handleAddTodo}>
+							+
+						</button>
+					</div>
+
+					{todos.length > 0 && (
+						<div className="todo-list">
+							{todos.map((todo) => (
+								<div key={todo.id} className="todo-item">
+									<input
+										type="checkbox"
+										checked={todo.completed}
+										onChange={() => handleToggleTodo(todo.id)}
+										className="todo-checkbox"
+									/>
+									<span className={`todo-text ${todo.completed ? "completed" : ""}`}>
+										{todo.text}
+									</span>
+									<button
+										type="button"
+										className="btn-delete-todo"
+										onClick={() => handleDeleteTodo(todo.id)}
+									>
+										×
+									</button>
+								</div>
+							))}
+						</div>
+					)}
 				</div>
 
 				<div className="form-actions">

@@ -21,7 +21,8 @@ const CENTER_X = CLOCK_SIZE / 2;
 const CENTER_Y = CLOCK_SIZE / 2;
 const OUTER_RADIUS = 200;
 const BLOCK_THICKNESS = 40;
-const HOUR_MARK_LENGTH = 20;
+const HOUR_MARK_LENGTH = 8;
+const INDICATOR_RING_THICKNESS = 6;
 
 export const Clock: React.FC<ClockProps> = ({
 	blocks,
@@ -32,6 +33,12 @@ export const Clock: React.FC<ClockProps> = ({
 }) => {
 	const svgRef = useRef<SVGSVGElement>(null);
 	const [hoveredBlockId, setHoveredBlockId] = useState<string | null>(null);
+
+	// Find active block for time hand color
+	const activeBlock = blocks.find(
+		(block) => currentMinute >= block.startMinute && currentMinute < block.endMinute
+	);
+	const timeHandColor = activeBlock?.color || "#FF6B6B";
 
 	const handleSvgClick = (event: React.MouseEvent<SVGSVGElement>) => {
 		if (!svgRef.current) return;
@@ -100,29 +107,15 @@ export const Clock: React.FC<ClockProps> = ({
 					const innerY = CENTER_Y + Math.sin(angleRad) * (OUTER_RADIUS + 10 - HOUR_MARK_LENGTH);
 
 					return (
-						<g key={`hour-${i}`}>
-							{/* Hour mark line */}
-							<line
-								x1={innerX}
-								y1={innerY}
-								x2={outerX}
-								y2={outerY}
-								stroke="#d0d0d0"
-								strokeWidth="2"
-							/>
-							{/* Hour label */}
-							<text
-								x={CENTER_X + Math.cos(angleRad) * (OUTER_RADIUS + 35)}
-								y={CENTER_Y + Math.sin(angleRad) * (OUTER_RADIUS + 35)}
-								textAnchor="middle"
-								dominantBaseline="middle"
-								className="hour-label"
-								fontSize="12"
-								fill="#999"
-							>
-								{i}
-							</text>
-						</g>
+						<line
+							key={`hour-${i}`}
+							x1={innerX}
+							y1={innerY}
+							x2={outerX}
+							y2={outerY}
+							stroke="#d0d0d0"
+							strokeWidth="1"
+						/>
 					);
 				})}
 
@@ -160,42 +153,56 @@ export const Clock: React.FC<ClockProps> = ({
 									transition: "all 0.2s ease",
 								}}
 							/>
-							{/* Block label */}
-							{block.endMinute - block.startMinute >= 60 && (
-								<text
-									x={CENTER_X}
-									y={CENTER_Y}
-									textAnchor="middle"
-									dominantBaseline="middle"
-									className="block-label"
-									fontSize="12"
-									fill="#333"
-									pointerEvents="none"
-									opacity={isHovered || isSelected ? 1 : 0.6}
-									style={{ transition: "opacity 0.2s ease" }}
-								>
-									{block.title}
-								</text>
-							)}
 						</g>
+					);
+				})}
+
+				{/* Outer indicator ring - shows block colors */}
+				{blocks.map((block) => {
+					const indicatorRadius = OUTER_RADIUS + 10 + INDICATOR_RING_THICKNESS / 2;
+					const pathData = getBlockArcPath(
+						block.startMinute,
+						block.endMinute,
+						indicatorRadius,
+						INDICATOR_RING_THICKNESS,
+						CENTER_X,
+						CENTER_Y
+					);
+
+					return (
+						<path
+							key={`indicator-${block.id}`}
+							d={pathData}
+							fill={block.color}
+							stroke="none"
+							opacity="0.6"
+						/>
 					);
 				})}
 
 				{/* Current time hand */}
 				<line
-					x1={CENTER_X}
-					y1={CENTER_Y}
+					x1={
+						CENTER_X +
+						Math.cos((minutesToDegrees(currentMinute) - 90) * (Math.PI / 180)) *
+							(OUTER_RADIUS - BLOCK_THICKNESS - 25)
+					}
+					y1={
+						CENTER_Y +
+						Math.sin((minutesToDegrees(currentMinute) - 90) * (Math.PI / 180)) *
+							(OUTER_RADIUS - BLOCK_THICKNESS - 25)
+					}
 					x2={
 						CENTER_X +
 						Math.cos((minutesToDegrees(currentMinute) - 90) * (Math.PI / 180)) *
-							(OUTER_RADIUS - BLOCK_THICKNESS - 20)
+							(OUTER_RADIUS - BLOCK_THICKNESS - 75)
 					}
 					y2={
 						CENTER_Y +
 						Math.sin((minutesToDegrees(currentMinute) - 90) * (Math.PI / 180)) *
-							(OUTER_RADIUS - BLOCK_THICKNESS - 20)
+							(OUTER_RADIUS - BLOCK_THICKNESS - 75)
 					}
-					stroke="#FF6B6B"
+					stroke={timeHandColor}
 					strokeWidth="3"
 					strokeLinecap="round"
 					className="time-hand"
@@ -205,7 +212,7 @@ export const Clock: React.FC<ClockProps> = ({
 				/>
 
 				{/* Center dot */}
-				<circle cx={CENTER_X} cy={CENTER_Y} r="6" fill="#FF6B6B" />
+				<circle cx={CENTER_X} cy={CENTER_Y} r="6" fill={timeHandColor} />
 			</svg>
 		</div>
 	);
