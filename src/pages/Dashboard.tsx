@@ -166,14 +166,16 @@ export const Dashboard: React.FC = () => {
 					<div className="current-time">{currentTimeFormatted}</div>
 					{activeBlock && <div className="active-block">Now: {activeBlock.title}</div>}
 				</div>
-				<button
-					className="settings-icon-btn"
-					onClick={() => setShowSettings(!showSettings)}
-					aria-label="Open settings"
-					title="Settings"
-				>
-					⚙️
-				</button>
+				<div className="header-settings">
+					<button
+						className="settings-icon-btn"
+						onClick={() => setShowSettings(!showSettings)}
+						aria-label="Open settings"
+						title="Settings"
+					>
+						⚙️
+					</button>
+				</div>
 			</header>
 
 			<div className="dashboard-content">

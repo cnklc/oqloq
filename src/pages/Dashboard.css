@@ -16,13 +16,29 @@
 .dashboard-header {
 	background: #ffffff;
 	border-bottom: 1px solid #f0f0f0;
-	padding: 32px 24px;
+	padding: 12px px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	align-items: center;
 	gap: 32px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 	position: relative;
+}
+
+.header-content {
+	flex: 0 1 auto;
+}
+
+.time-display {
+	margin-left: auto;
+}
+
+.header-settings {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex: 0 0 50px;
+	width: 50px;
 }
 
 :root.theme-dark .dashboard-header {
@@ -90,10 +106,7 @@
 	border-radius: 8px;
 	transition: all 0.2s;
 	color: #666;
-	position: absolute;
-	right: 20px;
-	top: 20px;
-	transform: translateY(-50%);
+	position: static;
 }
 
 :root.theme-dark .settings-icon-btn {
@@ -111,7 +124,7 @@
 }
 
 .settings-icon-btn:active {
-	transform: translateY(-50%) scale(0.95);
+	transform: scale(0.95);
 }
 
 /* Main content */
