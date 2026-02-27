@@ -29,7 +29,7 @@
 	flex: 0 1 auto;
 }
 
-.time-display {
+.dashboard-header .time-display {
 	margin-left: auto;
 }
 
@@ -70,21 +70,21 @@
 	color: var(--text-tertiary);
 }
 
-.time-display {
+.dashboard-header .time-display {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
 	gap: 8px;
 }
 
-.current-time {
+.dashboard-header .current-time {
 	font-size: 28px;
 	font-weight: 700;
 	color: #ff6b6b;
 	font-variant-numeric: tabular-nums;
 }
 
-.active-block {
+.dashboard-header .active-block {
 	font-size: 13px;
 	color: #666;
 	font-weight: 500;
@@ -389,7 +389,7 @@
 		font-size: 28px;
 	}
 
-	.current-time {
+	.dashboard-header .current-time {
 		font-size: 24px;
 	}
 }
@@ -414,11 +414,11 @@
 		font-size: 12px;
 	}
 
-	.time-display {
+	.dashboard-header .time-display {
 		align-items: center;
 	}
 
-	.active-block {
+	.dashboard-header .active-block {
 		text-align: center;
 		max-width: 100%;
 	}
