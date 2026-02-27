@@ -399,13 +399,6 @@
 		min-height: 100vh;
 	}
 
-	.dashboard-header {
-		flex-direction: column;
-		text-align: center;
-		padding: 20px 16px;
-		gap: 16px;
-	}
-
 	.header-content h1 {
 		font-size: 24px;
 	}
