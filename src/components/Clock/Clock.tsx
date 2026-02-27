@@ -93,8 +93,7 @@ export const Clock: React.FC<ClockProps> = ({
 					cx={CENTER_X}
 					cy={CENTER_Y}
 					r={MAIN_CIRCLE_RADIUS}
-					fill="#ffffff"
-					stroke="#e0e0e0"
+					className="clock-main-circle"
 					strokeWidth="1"
 				/>
 

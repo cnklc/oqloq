@@ -10,6 +10,11 @@
 	overflow: hidden;
 }
 
+:root.theme-dark .active-block-todos {
+	background: var(--bg-primary);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .todos-header {
 	flex-shrink: 0;
 }
@@ -19,6 +24,10 @@
 	font-size: 18px;
 	font-weight: 600;
 	letter-spacing: 0.5px;
+}
+
+:root.theme-dark .todos-header h3 {
+	color: var(--text-primary);
 }
 
 .todos-input-section {
@@ -41,10 +50,20 @@
 		background-color 0.2s;
 }
 
+:root.theme-dark .todos-input {
+	border: 1px solid var(--border-medium);
+	color: var(--text-primary);
+	background: var(--bg-secondary);
+}
+
 .todos-input:focus {
 	outline: none;
 	border-color: #ffb4d6;
 	background: #ffffff;
+}
+
+:root.theme-dark .todos-input:focus {
+	background: var(--bg-primary);
 }
 
 .todos-input::placeholder {

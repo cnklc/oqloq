@@ -7,6 +7,11 @@
 	background: linear-gradient(135deg, #fafaf8 0%, #f5f1f0 100%);
 }
 
+/* Dark theme dashboard background */
+:root.theme-dark .dashboard {
+	background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+}
+
 /* Header */
 .dashboard-header {
 	background: #ffffff;
@@ -20,6 +25,12 @@
 	position: relative;
 }
 
+:root.theme-dark .dashboard-header {
+	background: var(--bg-primary);
+	border-bottom: 1px solid var(--border-light);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 .header-content h1 {
 	margin: 0;
 	font-size: 32px;
@@ -28,11 +39,19 @@
 	letter-spacing: -0.5px;
 }
 
+:root.theme-dark .header-content h1 {
+	color: var(--text-primary);
+}
+
 .tagline {
 	margin: 4px 0 0 0;
 	font-size: 14px;
 	color: #999;
 	font-weight: 400;
+}
+
+:root.theme-dark .tagline {
+	color: var(--text-tertiary);
 }
 
 .time-display {
@@ -77,9 +96,18 @@
 	transform: translateY(-50%);
 }
 
+:root.theme-dark .settings-icon-btn {
+	color: var(--text-secondary);
+}
+
 .settings-icon-btn:hover {
 	background: #f5f5f5;
 	color: #333;
+}
+
+:root.theme-dark .settings-icon-btn:hover {
+	background: var(--bg-tertiary);
+	color: var(--text-primary);
 }
 
 .settings-icon-btn:active {
@@ -127,9 +155,17 @@
 	border-radius: 10px;
 }
 
+:root.theme-dark .sidebar::-webkit-scrollbar-track {
+	background: var(--bg-tertiary);
+}
+
 .sidebar::-webkit-scrollbar-thumb {
 	background: #d0d0d0;
 	border-radius: 10px;
+}
+
+:root.theme-dark .sidebar::-webkit-scrollbar-thumb {
+	background: var(--border-medium);
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
@@ -145,6 +181,12 @@
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+:root.theme-dark .block-details {
+	background: var(--bg-primary);
+	border: 1px solid var(--border-light);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .block-details h3 {
 	margin: 0 0 12px 0;
 	font-size: 18px;
@@ -152,11 +194,19 @@
 	color: #333;
 }
 
+:root.theme-dark .block-details h3 {
+	color: var(--text-primary);
+}
+
 .block-time {
 	margin: 0 0 16px 0;
 	font-size: 14px;
 	color: #666;
 	font-weight: 500;
+}
+
+:root.theme-dark .block-time {
+	color: var(--text-secondary);
 }
 
 .color-preview {
@@ -176,6 +226,12 @@
 	color: #999;
 	font-size: 13px;
 	line-height: 1.5;
+}
+
+:root.theme-dark .sidebar-hint {
+	background: var(--bg-primary);
+	border: 1px dashed var(--border-medium);
+	color: var(--text-tertiary);
 }
 
 .sidebar-hint p {

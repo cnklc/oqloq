@@ -15,6 +15,21 @@
 	height: auto;
 }
 
+:root.theme-dark .clock-svg {
+	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+/* Main clock circle */
+.clock-main-circle {
+	fill: #ffffff;
+	stroke: #e0e0e0;
+}
+
+:root.theme-dark .clock-main-circle {
+	fill: var(--bg-primary);
+	stroke: var(--border-medium);
+}
+
 /* Yelkovan (saniye ibresi) */
 .second-hand {
 	animation: none;

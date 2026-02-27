@@ -9,11 +9,21 @@
 	position: relative;
 }
 
+:root.theme-dark .template-selector {
+	background: var(--bg-primary);
+	border: 1px solid var(--border-light);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .template-selector h3 {
 	margin: 0 0 16px 0;
 	font-size: 16px;
 	font-weight: 600;
 	color: #333;
+}
+
+:root.theme-dark .template-selector h3 {
+	color: var(--text-primary);
 }
 
 .template-buttons {
@@ -43,9 +53,19 @@
 	flex: 1;
 }
 
+:root.theme-dark .template-btn {
+	background-color: var(--bg-secondary);
+	color: var(--text-secondary);
+}
+
 .template-btn:hover {
 	background-color: #eee;
 	border-color: #ddd;
+}
+
+:root.theme-dark .template-btn:hover {
+	background-color: var(--bg-tertiary);
+	border-color: var(--border-medium);
 }
 
 .template-btn.active {
@@ -72,6 +92,11 @@
 	min-width: 44px;
 	min-height: 44px;
 	flex-shrink: 0;
+}
+
+:root.theme-dark .delete-template-btn {
+	background-color: var(--bg-secondary);
+	border: 2px solid var(--border-medium);
 }
 
 .delete-template-btn:hover {

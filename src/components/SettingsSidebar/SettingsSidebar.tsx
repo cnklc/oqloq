@@ -3,7 +3,8 @@
  * Right side sliding panel for application settings
  */
 
-import React from "react";
+import React, { useState } from "react";
+import { getTheme, setTheme, type ThemeMode } from "../../services/themeService";
 import "./SettingsSidebar.css";
 
 interface SettingsSidebarProps {
@@ -12,6 +13,13 @@ interface SettingsSidebarProps {
 }
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClose }) => {
+	const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => getTheme());
+
+	const handleThemeChange = (theme: ThemeMode) => {
+		setTheme(theme);
+		setCurrentTheme(theme);
+	};
+
 	return (
 		<>
 			{/* Overlay for mobile and backdrop */}
@@ -70,10 +78,9 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							<label htmlFor="theme">Theme</label>
 							<select
 								id="theme"
-								defaultValue="light"
+								value={currentTheme}
 								onChange={(e) => {
-									localStorage.setItem("theme", e.target.value);
-									// Theme changing logic can be implemented later
+									handleThemeChange(e.target.value as ThemeMode);
 								}}
 							>
 								<option value="light">Light</option>
