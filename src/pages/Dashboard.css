@@ -17,6 +17,7 @@
 	align-items: center;
 	gap: 32px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+	position: relative;
 }
 
 .header-content h1 {
@@ -55,6 +56,34 @@
 	text-align: right;
 	max-width: 200px;
 	word-wrap: break-word;
+}
+
+/* Settings Icon Button */
+.settings-icon-btn {
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	padding: 8px 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	transition: all 0.2s;
+	color: #666;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	transform: translateY(-50%);
+}
+
+.settings-icon-btn:hover {
+	background: #f5f5f5;
+	color: #333;
+}
+
+.settings-icon-btn:active {
+	transform: translateY(-50%) scale(0.95);
 }
 
 /* Main content */
@@ -323,6 +352,11 @@
 	.active-block {
 		text-align: center;
 		max-width: 100%;
+	}
+
+	.settings-icon-btn {
+		position: static;
+		transform: none;
 	}
 
 	.dashboard-content {

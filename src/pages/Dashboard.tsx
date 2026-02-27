@@ -11,6 +11,7 @@ import { Clock } from "../components/Clock/Clock";
 import { BlockEditor } from "../components/BlockEditor/BlockEditor";
 import { TemplateSelector } from "../components/TemplateSelector/TemplateSelector";
 import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
+import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import {
 	switchTemplate,
 	getCurrentTemplate,
@@ -32,6 +33,7 @@ export const Dashboard: React.FC = () => {
 	const [templates, setTemplates] = useState<Template[]>(getAllTemplates());
 	const [showSaveTemplate, setShowSaveTemplate] = useState(false);
 	const [saveTemplateName, setSaveTemplateName] = useState("");
+	const [showSettings, setShowSettings] = useState(false);
 
 	// Find current active block
 	const activeBlock = blocks.find((block) =>
@@ -163,6 +165,14 @@ export const Dashboard: React.FC = () => {
 					<div className="current-time">{currentTimeFormatted}</div>
 					{activeBlock && <div className="active-block">Now: {activeBlock.title}</div>}
 				</div>
+				<button
+					className="settings-icon-btn"
+					onClick={() => setShowSettings(!showSettings)}
+					aria-label="Open settings"
+					title="Settings"
+				>
+					⚙️
+				</button>
 			</header>
 
 			<div className="dashboard-content">
@@ -295,6 +305,8 @@ export const Dashboard: React.FC = () => {
 					)}
 				</aside>
 			</div>
+
+			<SettingsSidebar isOpen={showSettings} onClose={() => setShowSettings(false)} />
 		</div>
 	);
 };
