@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# Oqloq - 24-Hour Creative Routine Clock
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for visually planning your day on a 24-hour circular clock. Built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+🌐 **Live Site**: [https://cnklc.github.io/oqloq/](https://cnklc.github.io/oqloq/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Features
 
-## React Compiler
+- 24-hour circular clock visualization with real-time hand movement
+- Create, edit, and delete time blocks with custom colors and titles
+- Template presets: Student and Professional
+- Drag-to-resize time blocks
+- LocalStorage persistence
+- Responsive design (desktop/mobile)
+- Current time display with active block indicator
+- Pomodoro timer
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Running Locally
 
-## Expanding the ESLint configuration
+### Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 18+
+- npm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Installation
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Opens at `http://localhost:5173`
+
+### Production Build
+
+```bash
+npm run build
+```
+
+Outputs to `dist/` directory.
+
+### Preview the Build
+
+```bash
+npm run preview
+```
+
+## 🚢 GitHub Pages Deployment
+
+Deployment is automated via GitHub Actions. Every push to `main` triggers the workflow defined in `.github/workflows/deploy.yml`, which:
+
+1. Installs dependencies
+2. Runs `npm run build`
+3. Deploys the `dist/` directory to GitHub Pages
+
+The live site is available at **[https://cnklc.github.io/oqloq/](https://cnklc.github.io/oqloq/)**.
+
+> **Note**: GitHub Pages must be configured to use **GitHub Actions** as the source (Settings → Pages → Source → GitHub Actions).
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 19 + TypeScript
+- **Build Tool**: Vite 7
+- **Styling**: CSS3 (no frameworks)
+- **State**: React hooks + LocalStorage
+- **Graphics**: SVG
+- **Linting**: ESLint + TypeScript
+
+## 💾 LocalStorage
+
+The app persists data to browser LocalStorage:
+
+- `oqlock_blocks` — Current routine blocks
+- `oqlock_templates` — Custom user templates
+- `oqlock_current_template` — Active template ID
+
+### Reset Storage (Browser Console)
+
+```javascript
+localStorage.removeItem("oqlock_blocks");
+localStorage.removeItem("oqlock_templates");
+localStorage.removeItem("oqlock_current_template");
+location.reload();
+```
+
+## 📄 License
+
+MIT
