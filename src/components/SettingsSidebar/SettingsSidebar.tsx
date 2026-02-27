@@ -5,6 +5,11 @@
 
 import React, { useState } from "react";
 import { getTheme, setTheme, type ThemeMode } from "../../services/themeService";
+import {
+	getPomodoroSettings,
+	savePomodoroSettings,
+	type PomodoroSettings,
+} from "../../services/pomodoroService";
 import "./SettingsSidebar.css";
 
 interface SettingsSidebarProps {
@@ -14,10 +19,19 @@ interface SettingsSidebarProps {
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClose }) => {
 	const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => getTheme());
+	const [pomodoroSettings, setPomodoroSettings] = useState<PomodoroSettings>(() =>
+		getPomodoroSettings()
+	);
 
 	const handleThemeChange = (theme: ThemeMode) => {
 		setTheme(theme);
 		setCurrentTheme(theme);
+	};
+
+	const handlePomodoroSettingChange = (key: keyof PomodoroSettings, value: number) => {
+		const newSettings = { ...pomodoroSettings, [key]: value };
+		setPomodoroSettings(newSettings);
+		savePomodoroSettings(newSettings);
 	};
 
 	return (
@@ -103,6 +117,79 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 								<option value="medium">Medium</option>
 								<option value="large">Large</option>
 							</select>
+						</div>
+					</div>
+
+					{/* Pomodoro Settings */}
+					<div className="settings-section">
+						<h3>Pomodoro</h3>
+
+						{/* Work Duration */}
+						<div className="setting-item">
+							<label htmlFor="work-duration">
+								Work Duration (minutes)
+								<span className="setting-value">{pomodoroSettings.workDuration}</span>
+							</label>
+							<input
+								type="range"
+								id="work-duration"
+								min="1"
+								max="60"
+								value={pomodoroSettings.workDuration}
+								onChange={(e) =>
+									handlePomodoroSettingChange("workDuration", Number(e.target.value))
+								}
+							/>
+						</div>
+
+						{/* Short Break */}
+						<div className="setting-item">
+							<label htmlFor="short-break">
+								Short Break (minutes)
+								<span className="setting-value">{pomodoroSettings.shortBreak}</span>
+							</label>
+							<input
+								type="range"
+								id="short-break"
+								min="1"
+								max="30"
+								value={pomodoroSettings.shortBreak}
+								onChange={(e) => handlePomodoroSettingChange("shortBreak", Number(e.target.value))}
+							/>
+						</div>
+
+						{/* Long Break */}
+						<div className="setting-item">
+							<label htmlFor="long-break">
+								Long Break (minutes)
+								<span className="setting-value">{pomodoroSettings.longBreak}</span>
+							</label>
+							<input
+								type="range"
+								id="long-break"
+								min="5"
+								max="60"
+								value={pomodoroSettings.longBreak}
+								onChange={(e) => handlePomodoroSettingChange("longBreak", Number(e.target.value))}
+							/>
+						</div>
+
+						{/* Long Break Interval */}
+						<div className="setting-item">
+							<label htmlFor="long-break-interval">
+								Long Break After (pomodoros)
+								<span className="setting-value">{pomodoroSettings.longBreakInterval}</span>
+							</label>
+							<input
+								type="range"
+								id="long-break-interval"
+								min="2"
+								max="10"
+								value={pomodoroSettings.longBreakInterval}
+								onChange={(e) =>
+									handlePomodoroSettingChange("longBreakInterval", Number(e.target.value))
+								}
+							/>
 						</div>
 					</div>
 

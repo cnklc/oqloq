@@ -208,6 +208,61 @@
 	accent-color: #ffb4d6;
 }
 
+/* Range inputs */
+.setting-item input[type="range"] {
+	width: 100%;
+	height: 6px;
+	border-radius: 3px;
+	background: #e0e0e0;
+	outline: none;
+	-webkit-appearance: none;
+	appearance: none;
+	cursor: pointer;
+}
+
+:root.theme-dark .setting-item input[type="range"] {
+	background: var(--border-medium);
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #ffb4d6;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #ffb4d6;
+	cursor: pointer;
+	border: none;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb:hover {
+	background: #ff9bc5;
+}
+
+.setting-item input[type="range"]::-moz-range-thumb:hover {
+	background: #ff9bc5;
+}
+
+.setting-value {
+	float: right;
+	font-weight: 600;
+	color: #ffb4d6;
+}
+
+:root.theme-dark .setting-value {
+	color: #ff9bc5;
+}
+
 /* About Section */
 .about-info {
 	font-size: 13px;

@@ -12,6 +12,7 @@ import { BlockEditor } from "../components/BlockEditor/BlockEditor";
 import { TemplateSelector } from "../components/TemplateSelector/TemplateSelector";
 import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
 import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
+import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
 import {
 	switchTemplate,
 	getCurrentTemplate,
@@ -306,6 +307,7 @@ export const Dashboard: React.FC = () => {
 				</aside>
 			</div>
 
+			<PomodoroTimer />
 			<SettingsSidebar isOpen={showSettings} onClose={() => setShowSettings(false)} />
 		</div>
 	);
