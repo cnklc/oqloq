@@ -42,6 +42,9 @@ export const PomodoroTimer: React.FC = () => {
 
 	const [timeLeft, setTimeLeft] = useState(() => getDuration("work"));
 
+	// Store original title to restore later
+	const [originalTitle] = useState(() => document.title);
+
 	// Reset timer when mode changes
 	useEffect(() => {
 		const newDuration = getDuration(mode);
@@ -166,12 +169,40 @@ export const PomodoroTimer: React.FC = () => {
 		}
 	};
 
+	// Update document title when minimized or running
+	useEffect(() => {
+		if (isMinimized || isRunning) {
+			const emoji = isRunning ? "⏱️" : "⏸️";
+
+			// Get mode-specific display values
+			let modeEmoji = "🎯";
+			let modeText = "Focus";
+			if (mode === "shortBreak") {
+				modeEmoji = "☕";
+				modeText = "Short Break";
+			} else if (mode === "longBreak") {
+				modeEmoji = "🌴";
+				modeText = "Long Break";
+			}
+
+			document.title = `${emoji} ${formatTime(timeLeft)} - ${modeEmoji} ${modeText}`;
+		} else {
+			document.title = originalTitle;
+		}
+
+		// Cleanup: restore original title on unmount
+		return () => {
+			document.title = originalTitle;
+		};
+	}, [isMinimized, isRunning, timeLeft, mode, originalTitle]);
+
 	return (
 		<div className={`pomodoro-timer ${isMinimized ? "minimized" : ""}`}>
 			<div className="pomodoro-header">
 				<div className="pomodoro-mode">
 					<span className="mode-icon">{getModeIcon()}</span>
 					<span className="mode-label">{getModeLabel()}</span>
+					{isMinimized && <span className="minimized-time">{formatTime(timeLeft)}</span>}
 				</div>
 				<button
 					className="minimize-btn"

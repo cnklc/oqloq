@@ -55,6 +55,20 @@
 	color: var(--text-primary);
 }
 
+.minimized-time {
+	font-size: 16px;
+	font-weight: 700;
+	color: #ffb4d6;
+	margin-left: 4px;
+	font-variant-numeric: tabular-nums;
+	font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Courier New", monospace;
+	letter-spacing: -1px;
+}
+
+:root.theme-dark .minimized-time {
+	color: #ffb4d6;
+}
+
 .minimize-btn {
 	background: none;
 	border: none;

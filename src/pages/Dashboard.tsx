@@ -46,7 +46,7 @@ export const Dashboard: React.FC = () => {
 		setIsEditing(true);
 	};
 
-	const handleEmptyClick = (_minute: number) => {
+	const handleEmptyClick = () => {
 		setSelectedBlockId(null);
 		setIsEditing(true);
 	};
