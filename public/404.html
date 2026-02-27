@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Oqloq - 24-Hour Routine Clock</title>
+		<script>
+			// SPA fallback: redirect 404s back to the app with the path encoded
+			// in the query string so the app can restore the correct URL.
+			var segmentCount = 1; // number of path segments in the base path (/oqloq)
+			var location = window.location;
+			location.replace(
+				location.protocol +
+					"//" +
+					location.hostname +
+					(location.port ? ":" + location.port : "") +
+					location.pathname
+						.split("/")
+						.slice(0, 1 + segmentCount)
+						.join("/") +
+					"/?p=/" +
+					location.pathname
+						.slice(1)
+						.split("/")
+						.slice(segmentCount)
+						.join("/")
+						.replace(/&/g, "~and~") +
+					(location.search ? "&q=" + location.search.slice(1).replace(/&/g, "~and~") : "") +
+					location.hash
+			);
+		</script>
+	</head>
+	<body></body>
+</html>
