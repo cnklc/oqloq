@@ -75,7 +75,30 @@ export const PomodoroTimer: React.FC = () => {
 			const title = mode === "work" ? "Break Time!" : "Work Time!";
 			const body =
 				mode === "work" ? "Great job! Time for a break." : "Break is over. Ready to focus?";
-			new Notification(title, { body, icon: "/favicon.ico" });
+			const notifOptions: NotificationOptions = { body, icon: "/vite.svg" };
+
+			// Use service worker notification when available so PWA can receive it
+			if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+				navigator.serviceWorker.ready
+					.then((registration) => {
+						registration.showNotification(title, notifOptions);
+					})
+					.catch(() => {
+						// Fallback to page-level notification on SW error
+						const notif = new Notification(title, notifOptions);
+						notif.onclick = () => {
+							window.focus();
+							notif.close();
+						};
+					});
+			} else {
+				// Fallback: page-level notification with focus handler
+				const notif = new Notification(title, notifOptions);
+				notif.onclick = () => {
+					window.focus();
+					notif.close();
+				};
+			}
 		}
 
 		// Switch to next mode
