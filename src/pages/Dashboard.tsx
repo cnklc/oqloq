@@ -1,8 +1,3 @@
-/**
- * Dashboard Page
- * Main application page integrating all components
- */
-
 import React, { useState } from "react";
 import type { RoutineBlock, Template, Todo } from "../types/models";
 import { useRoutineBlocks } from "../hooks/useRoutineBlocks";
