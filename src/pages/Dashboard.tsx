@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { RoutineBlock, Template, Todo } from "../types/models";
 import { useRoutineBlocks } from "../hooks/useRoutineBlocks";
 import { useCurrentTime } from "../hooks/useCurrentTime";
@@ -8,15 +8,16 @@ import { TemplateSelector } from "../components/TemplateSelector/TemplateSelecto
 import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
 import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
+import { DailySchedule } from "../components/DailySchedule/DailySchedule";
 import {
 	switchTemplate,
 	getCurrentTemplate,
 	getAllTemplates,
 	createTemplateFromBlocks,
 	deleteTemplate,
-	isDefaultTemplate,
 } from "../services/templateService";
-import { minutesToTimeString, isTimeInBlock } from "../services/clockService";
+import { minutesToTimeString, isTimeInBlock, getCurrentDayOfWeek } from "../services/clockService";
+import { getDaySchedule } from "../services/storageService";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
@@ -30,6 +31,15 @@ export const Dashboard: React.FC = () => {
 	const [showSaveTemplate, setShowSaveTemplate] = useState(false);
 	const [saveTemplateName, setSaveTemplateName] = useState("");
 	const [showSettings, setShowSettings] = useState(false);
+	const [currentDayOfWeek] = useState<number>(() => getCurrentDayOfWeek());
+
+	// Auto-load today's day schedule on mount if one is defined
+	useEffect(() => {
+		const todaySchedule = getDaySchedule(currentDayOfWeek);
+		if (todaySchedule) {
+			setBlocks(todaySchedule.blocks);
+		}
+	}, [currentDayOfWeek, setBlocks]);
 
 	// Find current active block
 	const activeBlock = blocks.find((block) =>
@@ -201,8 +211,17 @@ export const Dashboard: React.FC = () => {
 						currentTemplateId={currentTemplateId}
 						onTemplateSelect={handleTemplateSwitch}
 						onTemplateDelete={handleDeleteTemplate}
-						isDefaultTemplate={isDefaultTemplate}
 						hasUnsavedChanges={false}
+					/>
+
+					<DailySchedule
+						currentBlocks={blocks}
+						onLoadSchedule={(newBlocks) => {
+							setBlocks(newBlocks);
+							setIsEditing(false);
+							setSelectedBlockId(null);
+						}}
+						currentDayOfWeek={currentDayOfWeek}
 					/>
 
 					{isEditing && (

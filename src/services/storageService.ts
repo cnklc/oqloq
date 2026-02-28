@@ -3,12 +3,14 @@
  * Handles LocalStorage persistence for blocks and templates
  */
 
-import type { RoutineBlock, Template } from "../types/models";
+import type { RoutineBlock, Template, DaySchedule } from "../types/models";
 import { DEFAULT_TEMPLATES } from "../types/models";
 
 const BLOCKS_KEY = "oqlock_blocks";
 const TEMPLATES_KEY = "oqlock_templates";
 const CURRENT_TEMPLATE_KEY = "oqlock_current_template";
+const DAY_SCHEDULES_KEY = "oqlock_day_schedules";
+const DELETED_DEFAULTS_KEY = "oqlock_deleted_defaults";
 
 /**
  * Get all routine blocks from storage
@@ -40,19 +42,21 @@ export const saveBlocks = (blocks: RoutineBlock[]): void => {
 
 /**
  * Get all templates from storage
- * Includes default templates
+ * Includes default templates (except those that have been deleted)
  */
 export const getTemplates = (): Template[] => {
+	const deletedIds = getDeletedDefaultTemplateIds();
+	const visibleDefaults = DEFAULT_TEMPLATES.filter((t) => !deletedIds.includes(t.id));
 	try {
 		const stored = localStorage.getItem(TEMPLATES_KEY);
 		if (stored) {
 			const customTemplates = JSON.parse(stored);
-			return [...DEFAULT_TEMPLATES, ...customTemplates];
+			return [...visibleDefaults, ...customTemplates];
 		}
 	} catch (error) {
 		console.error("Error reading templates from storage:", error);
 	}
-	return DEFAULT_TEMPLATES;
+	return visibleDefaults;
 };
 
 /**
@@ -137,7 +141,92 @@ export const clearAllStorage = (): void => {
 		localStorage.removeItem(BLOCKS_KEY);
 		localStorage.removeItem(TEMPLATES_KEY);
 		localStorage.removeItem(CURRENT_TEMPLATE_KEY);
+		localStorage.removeItem(DAY_SCHEDULES_KEY);
+		localStorage.removeItem(DELETED_DEFAULTS_KEY);
 	} catch (error) {
 		console.error("Error clearing storage:", error);
+	}
+};
+
+/**
+ * Get IDs of default templates that the user has deleted
+ */
+export const getDeletedDefaultTemplateIds = (): string[] => {
+	try {
+		const stored = localStorage.getItem(DELETED_DEFAULTS_KEY);
+		if (stored) {
+			return JSON.parse(stored);
+		}
+	} catch (error) {
+		console.error("Error reading deleted defaults from storage:", error);
+	}
+	return [];
+};
+
+/**
+ * Mark a default template as deleted
+ */
+export const addDeletedDefaultTemplateId = (templateId: string): void => {
+	try {
+		const ids = getDeletedDefaultTemplateIds();
+		if (!ids.includes(templateId)) {
+			ids.push(templateId);
+			localStorage.setItem(DELETED_DEFAULTS_KEY, JSON.stringify(ids));
+		}
+	} catch (error) {
+		console.error("Error saving deleted default to storage:", error);
+	}
+};
+
+/**
+ * Get all day schedules from storage
+ */
+export const getDaySchedules = (): DaySchedule[] => {
+	try {
+		const stored = localStorage.getItem(DAY_SCHEDULES_KEY);
+		if (stored) {
+			return JSON.parse(stored);
+		}
+	} catch (error) {
+		console.error("Error reading day schedules from storage:", error);
+	}
+	return [];
+};
+
+/**
+ * Get the day schedule for a specific day of week
+ */
+export const getDaySchedule = (dayOfWeek: number): DaySchedule | null => {
+	const schedules = getDaySchedules();
+	return schedules.find((s) => s.dayOfWeek === dayOfWeek) || null;
+};
+
+/**
+ * Save (create or update) a day schedule
+ */
+export const saveDaySchedule = (schedule: DaySchedule): void => {
+	try {
+		const schedules = getDaySchedules();
+		const index = schedules.findIndex((s) => s.dayOfWeek === schedule.dayOfWeek);
+		if (index >= 0) {
+			schedules[index] = schedule;
+		} else {
+			schedules.push(schedule);
+		}
+		localStorage.setItem(DAY_SCHEDULES_KEY, JSON.stringify(schedules));
+	} catch (error) {
+		console.error("Error saving day schedule to storage:", error);
+	}
+};
+
+/**
+ * Delete the day schedule for a specific day of week
+ */
+export const deleteDaySchedule = (dayOfWeek: number): void => {
+	try {
+		const schedules = getDaySchedules().filter((s) => s.dayOfWeek !== dayOfWeek);
+		localStorage.setItem(DAY_SCHEDULES_KEY, JSON.stringify(schedules));
+	} catch (error) {
+		console.error("Error deleting day schedule from storage:", error);
 	}
 };

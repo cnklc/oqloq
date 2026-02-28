@@ -119,6 +119,13 @@ export const clampMinutes = (minutes: number): number => {
 };
 
 /**
+ * Get current day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+ */
+export const getCurrentDayOfWeek = (): number => {
+	return new Date().getDay();
+};
+
+/**
  * Check if a minute value is within a block's time range
  */
 export const isTimeInBlock = (minute: number, blockStart: number, blockEnd: number): boolean => {

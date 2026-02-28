@@ -31,6 +31,12 @@ export const COLOR_PALETTE = [
 	"#FFD1DC", // Light pink
 ];
 
+// Day schedule: maps a day of week to a set of routine blocks
+export interface DaySchedule {
+	dayOfWeek: number; // 0=Sunday, 1=Monday, ..., 6=Saturday
+	blocks: RoutineBlock[];
+}
+
 // Default templates
 export const DEFAULT_TEMPLATES: Template[] = [
 	{

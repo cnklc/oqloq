@@ -1,0 +1,260 @@
+/* DailySchedule Component Styles */
+
+.daily-schedule {
+	background: #ffffff;
+	border: 1px solid #f0f0f0;
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	position: relative;
+}
+
+:root.theme-dark .daily-schedule {
+	background: var(--bg-primary);
+	border: 1px solid var(--border-light);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.daily-schedule h3 {
+	margin: 0 0 14px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+}
+
+:root.theme-dark .daily-schedule h3 {
+	color: var(--text-primary);
+}
+
+/* Day grid */
+.day-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+.day-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 6px 4px;
+	border-radius: 8px;
+	background: #f5f5f5;
+	border: 2px solid transparent;
+	transition: all 0.2s;
+	min-width: 0;
+}
+
+:root.theme-dark .day-item {
+	background: var(--bg-secondary);
+}
+
+.day-item.today {
+	border-color: #ffb4d6;
+	background: #fff0f6;
+}
+
+:root.theme-dark .day-item.today {
+	border-color: #ffb4d6;
+	background: rgba(255, 180, 214, 0.1);
+}
+
+.day-item.has-schedule {
+	background: #e8f5e9;
+}
+
+:root.theme-dark .day-item.has-schedule {
+	background: rgba(202, 255, 191, 0.12);
+}
+
+.day-item.today.has-schedule {
+	background: #fff0f6;
+	border-color: #ffb4d6;
+}
+
+.day-name {
+	font-size: 11px;
+	font-weight: 600;
+	color: #555;
+}
+
+:root.theme-dark .day-name {
+	color: var(--text-secondary);
+}
+
+.day-item.today .day-name {
+	color: #e07ab0;
+}
+
+.day-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	width: 100%;
+}
+
+.day-btn {
+	width: 100%;
+	padding: 3px 2px;
+	border: none;
+	border-radius: 4px;
+	font-size: 11px;
+	cursor: pointer;
+	transition: all 0.15s;
+	line-height: 1;
+}
+
+.day-btn.load {
+	background: #a8d8ff;
+	color: #1a6090;
+}
+
+.day-btn.load:hover {
+	background: #85c8ff;
+}
+
+.day-btn.copy-from {
+	background: #e0d5ff;
+	color: #5a3fad;
+}
+
+.day-btn.copy-from:hover {
+	background: #c9b8ff;
+}
+
+.day-btn.delete {
+	background: #ffe0e0;
+	color: #cc3333;
+}
+
+.day-btn.delete:hover {
+	background: #ffb4b4;
+}
+
+/* Save schedule button */
+.save-schedule-btn {
+	width: 100%;
+	margin-top: 4px;
+	font-size: 13px;
+}
+
+/* Dialog */
+.schedule-dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.4);
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 20;
+	animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.schedule-dialog-content {
+	background: white;
+	border-radius: 12px;
+	padding: 20px;
+	width: calc(100% - 32px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	animation: slideUp 0.2s;
+}
+
+:root.theme-dark .schedule-dialog-content {
+	background: var(--bg-primary);
+	color: var(--text-primary);
+}
+
+@keyframes slideUp {
+	from { transform: translateY(10px); opacity: 0; }
+	to { transform: translateY(0); opacity: 1; }
+}
+
+.schedule-dialog-content h4 {
+	margin: 0 0 12px 0;
+	font-size: 15px;
+	font-weight: 600;
+	color: #333;
+}
+
+:root.theme-dark .schedule-dialog-content h4 {
+	color: var(--text-primary);
+}
+
+.day-checkboxes {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.day-checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	color: #444;
+	cursor: pointer;
+}
+
+:root.theme-dark .day-checkbox-label {
+	color: var(--text-secondary);
+}
+
+.day-checkbox-label input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	accent-color: #ffb4d6;
+}
+
+/* Quick select buttons */
+.quick-select {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.btn-ghost {
+	padding: 6px 12px;
+	background: transparent;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 12px;
+	cursor: pointer;
+	color: #555;
+	transition: all 0.15s;
+}
+
+.btn-ghost:hover {
+	background: #f0f0f0;
+	border-color: #bbb;
+}
+
+:root.theme-dark .btn-ghost {
+	border-color: var(--border-medium);
+	color: var(--text-secondary);
+}
+
+:root.theme-dark .btn-ghost:hover {
+	background: var(--bg-secondary);
+}
+
+.dialog-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.dialog-actions .btn {
+	flex: 1;
+}
