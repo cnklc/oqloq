@@ -19,16 +19,16 @@ export interface Template {
 	blocks: RoutineBlock[];
 }
 
-// Bauhaus color palette
+// Default color palette
 export const COLOR_PALETTE = [
-	"#E63946", // Cadmium Red
-	"#1D3557", // Prussian Blue
-	"#FFB703", // Golden Yellow
-	"#1A1A1A", // Black
-	"#F2F2F2", // Off-white
-	"#457B9D", // Steel Blue
-	"#A8DADC", // Light Cyan
-	"#E9C46A", // Sand Yellow
+	"#FFB4D6", // Pink
+	"#A8D8FF", // Light blue
+	"#FFD6A5", // Peachy
+	"#CAFFBF", // Light green
+	"#E0D5FF", // Lavender
+	"#FFF4B0", // Pale yellow
+	"#B4E3FF", // Cyan
+	"#FFD1DC", // Light pink
 ];
 
 // Day schedule: maps a day of week to a set of routine blocks
@@ -46,7 +46,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "student-sleep-1",
 				title: "Sleep",
-				color: "#1D3557",
+				color: "#A8D8FF",
 				startMinute: 0, // 00:00
 				endMinute: 480, // 08:00
 				todos: [],
@@ -54,7 +54,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "student-school",
 				title: "School",
-				color: "#FFB703",
+				color: "#FFD6A5",
 				startMinute: 480, // 08:00
 				endMinute: 960, // 16:00
 				todos: [],
@@ -62,7 +62,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "student-study",
 				title: "Study",
-				color: "#E63946",
+				color: "#CAFFBF",
 				startMinute: 960, // 16:00
 				endMinute: 1200, // 20:00
 				todos: [],
@@ -70,7 +70,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "student-free",
 				title: "Free Time",
-				color: "#457B9D",
+				color: "#E0D5FF",
 				startMinute: 1200, // 20:00
 				endMinute: 1440, // 24:00
 				todos: [],
@@ -84,7 +84,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "pro-sleep",
 				title: "Sleep",
-				color: "#1D3557",
+				color: "#A8D8FF",
 				startMinute: 0, // 00:00
 				endMinute: 420, // 07:00
 				todos: [],
@@ -92,7 +92,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "pro-deepwork",
 				title: "Deep Work",
-				color: "#E63946",
+				color: "#FFD6A5",
 				startMinute: 420, // 07:00
 				endMinute: 840, // 14:00
 				todos: [],
@@ -100,7 +100,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "pro-meetings",
 				title: "Meetings",
-				color: "#FFB703",
+				color: "#CAFFBF",
 				startMinute: 840, // 14:00
 				endMinute: 1080, // 18:00
 				todos: [],
@@ -108,7 +108,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			{
 				id: "pro-personal",
 				title: "Personal Time",
-				color: "#457B9D",
+				color: "#E0D5FF",
 				startMinute: 1080, // 18:00
 				endMinute: 1440, // 24:00
 				todos: [],
