@@ -1,62 +1,34 @@
-/* Clock Component Styles */
+/* Clock Component Styles - Bauhaus Edition */
 
 .clock-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	max-width: 700px;
+	max-width: 560px;
 	margin: 0 auto;
 }
 
 .clock-svg {
-	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 	max-width: 100%;
 	height: auto;
 }
 
-:root.theme-dark .clock-svg {
-	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
-}
-
-/* Main clock circle */
+/* Main clock circle - Bauhaus: black stroke, off-white fill */
 .clock-main-circle {
-	fill: #ffffff;
-	stroke: #e0e0e0;
+	fill: #F2F2F2;
+	stroke: #1A1A1A;
 }
 
-:root.theme-dark .clock-main-circle {
-	fill: var(--bg-primary);
-	stroke: var(--border-medium);
-}
-
-/* Yelkovan (saniye ibresi) */
+/* Time hand - no transition for precision */
 .second-hand {
 	animation: none;
 	transform-origin: 50% 50%;
 	transform-box: fill-box;
-	stroke-linecap: round;
-}
-
-/* Dış halka - silindir efekti */
-.outer-ring-shadow {
-	opacity: 0.5;
-	transition: opacity 0.2s ease;
-}
-
-.outer-ring-light {
-	opacity: 0.85;
-	transition: opacity 0.2s ease;
-}
-
-.outer-ring-light:hover {
-	opacity: 1;
-	filter: brightness(1.1);
 }
 
 @media (max-width: 600px) {
 	.clock-container {
 		max-width: 100%;
-		padding: 20px;
 	}
 }

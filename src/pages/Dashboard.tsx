@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import type { RoutineBlock, Template, Todo } from "../types/models";
+import type { RoutineBlock, Template } from "../types/models";
+import { COLOR_PALETTE } from "../types/models";
 import { useRoutineBlocks } from "../hooks/useRoutineBlocks";
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { Clock } from "../components/Clock/Clock";
 import { BlockEditor } from "../components/BlockEditor/BlockEditor";
 import { TemplateSelector } from "../components/TemplateSelector/TemplateSelector";
-import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
-import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
-import { DailySchedule } from "../components/DailySchedule/DailySchedule";
 import {
 	switchTemplate,
 	getCurrentTemplate,
@@ -83,7 +81,7 @@ export const Dashboard: React.FC = () => {
 
 	const handleSaveAsTemplate = () => {
 		if (!saveTemplateName.trim()) {
-			alert("Lütfen template adı girin");
+			alert("Please enter a template name");
 			return;
 		}
 
@@ -91,13 +89,12 @@ export const Dashboard: React.FC = () => {
 		setTemplates(getAllTemplates());
 		setShowSaveTemplate(false);
 		setSaveTemplateName("");
-		alert(`"${newTemplate.name}" template olarak kaydedildi!`);
+		alert(`"${newTemplate.name}" saved as template!`);
 	};
 
 	const handleDeleteTemplate = (templateId: string) => {
 		const deleted = deleteTemplate(templateId);
 		if (deleted) {
-			// If deleted template was active, switch to student template
 			if (currentTemplateId === templateId) {
 				const newBlocks = switchTemplate("student");
 				setBlocks(newBlocks);
@@ -107,78 +104,35 @@ export const Dashboard: React.FC = () => {
 		}
 	};
 
-	const handleAddTodo = (blockId: string, todoText: string) => {
+	const handleDropColorOnBlock = (blockId: string, color: string) => {
 		const block = blocks.find((b) => b.id === blockId);
 		if (!block) return;
-
-		const newTodo: Todo = {
-			id: `todo_${Date.now()}`,
-			text: todoText,
-			completed: false,
-		};
-
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: [...(block.todos || []), newTodo],
-		};
-
-		updateBlock(blockId, updatedBlock);
-	};
-
-	const handleToggleTodo = (blockId: string, todoId: string) => {
-		const block = blocks.find((b) => b.id === blockId);
-		if (!block) return;
-
-		const updatedTodos = (block.todos || []).map((todo) =>
-			todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
-		);
-
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: updatedTodos,
-		};
-
-		updateBlock(blockId, updatedBlock);
-	};
-
-	const handleDeleteTodo = (blockId: string, todoId: string) => {
-		const block = blocks.find((b) => b.id === blockId);
-		if (!block) return;
-
-		const updatedTodos = (block.todos || []).filter((todo) => todo.id !== todoId);
-
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: updatedTodos,
-		};
-
-		updateBlock(blockId, updatedBlock);
+		updateBlock(blockId, { ...block, color });
 	};
 
 	const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
 	const selectedStartMinute = selectedBlock
 		? selectedBlock.startMinute
-		: Math.round(currentMinute / 30) * 30; // Round to nearest 30 min for new blocks
+		: Math.round(currentMinute / 30) * 30;
 
 	return (
 		<div className="dashboard">
 			<header className="dashboard-header">
 				<div className="header-content">
 					<h1>Oqloq</h1>
-					<p className="tagline">24-Hour Creative Routine Clock</p>
+					<p className="tagline">24-Hour Routine Clock</p>
 				</div>
 				<div className="time-display">
 					<div className="current-time">{currentTimeFormatted}</div>
-					{activeBlock && <div className="active-block">Now: {activeBlock.title}</div>}
+					{activeBlock && <div className="active-block">{activeBlock.title}</div>}
 				</div>
 				<div className="header-settings">
 					<button
 						className="settings-icon-btn"
 						onClick={() => setShowSettings(!showSettings)}
 						aria-label="Open settings"
-						title="Settings"
 					>
-						⚙️
+						Settings
 					</button>
 				</div>
 			</header>
@@ -189,61 +143,79 @@ export const Dashboard: React.FC = () => {
 						<Clock
 							blocks={blocks}
 							currentMinute={currentMinute}
+							currentTimeFormatted={currentTimeFormatted}
 							onBlockClick={handleBlockClick}
 							onEmptyClick={handleEmptyClick}
+							onDropColor={handleDropColorOnBlock}
 							selectedBlockId={selectedBlockId || undefined}
 						/>
 					</div>
 				</main>
 
-				<aside className="todos-panel">
-					<ActiveBlockTodos
-						activeBlock={activeBlock || null}
-						onAddTodo={handleAddTodo}
-						onToggleTodo={handleToggleTodo}
-						onDeleteTodo={handleDeleteTodo}
-					/>
-				</aside>
-
 				<aside className="sidebar">
-					<TemplateSelector
-						templates={templates}
-						currentTemplateId={currentTemplateId}
-						onTemplateSelect={handleTemplateSwitch}
-						onTemplateDelete={handleDeleteTemplate}
-						hasUnsavedChanges={false}
-					/>
+					{/* Focus - Pomodoro Timer */}
+					<div className="sidebar-section">
+						<div className="sidebar-section-title">Focus</div>
+						<PomodoroTimer inline />
+					</div>
 
-					<DailySchedule
-						currentBlocks={blocks}
-						onLoadSchedule={(newBlocks) => {
-							setBlocks(newBlocks);
-							setIsEditing(false);
-							setSelectedBlockId(null);
-						}}
-						currentDayOfWeek={currentDayOfWeek}
-					/>
+					{/* Legend - Color Palette */}
+					<div className="sidebar-section">
+						<div className="sidebar-section-title">Legend</div>
+						<div className="legend-grid">
+							{COLOR_PALETTE.map((color) => (
+								<div
+									key={color}
+									className="legend-swatch"
+									style={{ backgroundColor: color }}
+									draggable
+									onDragStart={(e) => {
+										e.dataTransfer.setData("text/plain", color);
+										e.dataTransfer.effectAllowed = "copy";
+									}}
+									title={color}
+								/>
+							))}
+						</div>
+					</div>
+
+					{/* Controls - Templates & Block Editor */}
+					<div className="sidebar-section">
+						<div className="sidebar-section-title">Templates</div>
+						<TemplateSelector
+							templates={templates}
+							currentTemplateId={currentTemplateId}
+							onTemplateSelect={handleTemplateSwitch}
+							onTemplateDelete={handleDeleteTemplate}
+							hasUnsavedChanges={false}
+						/>
+					</div>
 
 					{isEditing && (
-						<BlockEditor
-							block={selectedBlock}
-							onSave={handleSaveBlock}
-							onCancel={() => {
-								setIsEditing(false);
-								setSelectedBlockId(null);
-							}}
-							onDelete={handleDeleteBlock}
-							initialStartMinute={selectedStartMinute}
-						/>
+						<div className="sidebar-section">
+							<div className="sidebar-section-title">
+								{selectedBlock ? "Edit Block" : "New Block"}
+							</div>
+							<BlockEditor
+								block={selectedBlock}
+								onSave={handleSaveBlock}
+								onCancel={() => {
+									setIsEditing(false);
+									setSelectedBlockId(null);
+								}}
+								onDelete={handleDeleteBlock}
+								initialStartMinute={selectedStartMinute}
+							/>
+						</div>
 					)}
 
 					{selectedBlockId && !isEditing && (
-						<div className="block-details">
+						<div className="sidebar-section">
 							{selectedBlock && (
-								<>
+								<div className="block-details">
 									<h3>{selectedBlock.title}</h3>
 									<p className="block-time">
-										{minutesToTimeString(selectedBlock.startMinute)} -{" "}
+										{minutesToTimeString(selectedBlock.startMinute)} –{" "}
 										{minutesToTimeString(selectedBlock.endMinute)}
 									</p>
 									<div style={{ marginBottom: "12px" }}>
@@ -259,72 +231,94 @@ export const Dashboard: React.FC = () => {
 									>
 										Edit
 									</button>
-								</>
+								</div>
 							)}
 						</div>
 					)}
 
 					{!selectedBlockId && !isEditing && (
-						<div className="sidebar-hint">
-							<p>Click on the clock to create or edit a block</p>
-							<button
-								className="btn btn-secondary"
-								onClick={() => setShowSaveTemplate(true)}
-								style={{ marginTop: "16px", width: "100%" }}
-							>
-								💾 Template Olarak Kaydet
-							</button>
-						</div>
-					)}
-
-					{showSaveTemplate && (
-						<div className="save-template-dialog">
-							<div className="save-template-content">
-								<h3>Template Olarak Kaydet</h3>
-								<input
-									type="text"
-									placeholder="Template adını girin"
-									value={saveTemplateName}
-									onChange={(e) => setSaveTemplateName(e.target.value)}
-									onKeyPress={(e) => e.key === "Enter" && handleSaveAsTemplate()}
-									autoFocus
-									style={{
-										padding: "10px 12px",
-										borderRadius: "8px",
-										border: "1px solid #e0e0e0",
-										fontSize: "14px",
-										marginBottom: "12px",
-										width: "100%",
-										color: "#000000",
-									}}
-								/>
-								<div style={{ display: "flex", gap: "8px" }}>
-									<button
-										className="btn btn-primary"
-										onClick={handleSaveAsTemplate}
-										style={{ flex: 1 }}
-									>
-										Kaydet
-									</button>
-									<button
-										className="btn btn-secondary"
-										onClick={() => {
-											setShowSaveTemplate(false);
-											setSaveTemplateName("");
-										}}
-										style={{ flex: 1 }}
-									>
-										İptal
-									</button>
-								</div>
+						<div className="sidebar-section">
+							<div className="sidebar-hint">
+								<p>Click the clock ring to create or edit a block</p>
+								<button
+									className="btn btn-secondary"
+									onClick={() => setShowSaveTemplate(true)}
+									style={{ marginTop: "16px", width: "100%" }}
+								>
+									Save as Template
+								</button>
 							</div>
 						</div>
 					)}
 				</aside>
 			</div>
 
-			<PomodoroTimer />
-			<SettingsSidebar isOpen={showSettings} onClose={() => setShowSettings(false)} />
+			{showSaveTemplate && (
+				<div className="save-template-dialog">
+					<div className="save-template-content">
+						<h3>Save as Template</h3>
+						<input
+							type="text"
+							placeholder="Template name"
+							value={saveTemplateName}
+							onChange={(e) => setSaveTemplateName(e.target.value)}
+							onKeyPress={(e) => e.key === "Enter" && handleSaveAsTemplate()}
+							autoFocus
+							style={{
+								padding: "10px 12px",
+								border: "1px solid #1A1A1A",
+								fontSize: "14px",
+								marginBottom: "12px",
+								width: "100%",
+								color: "#1A1A1A",
+								background: "#F2F2F2",
+								fontFamily: "inherit",
+							}}
+						/>
+						<div style={{ display: "flex", gap: "0" }}>
+							<button
+								className="btn btn-primary"
+								onClick={handleSaveAsTemplate}
+								style={{ flex: 1 }}
+							>
+								Save
+							</button>
+							<button
+								className="btn btn-secondary"
+								onClick={() => {
+									setShowSaveTemplate(false);
+									setSaveTemplateName("");
+								}}
+								style={{ flex: 1 }}
+							>
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{showSettings && (
+				<div className="save-template-dialog" onClick={() => setShowSettings(false)}>
+					<div
+						className="save-template-content"
+						onClick={(e) => e.stopPropagation()}
+						style={{ textAlign: "center" }}
+					>
+						<h3>Settings</h3>
+						<p style={{ marginTop: "12px", color: "#666", fontSize: "13px" }}>
+							Use the Legend swatches to drag colors onto clock segments.
+						</p>
+						<button
+							className="btn btn-primary"
+							onClick={() => setShowSettings(false)}
+							style={{ marginTop: "16px", width: "100%" }}
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
