@@ -1,30 +1,38 @@
-/* Global Styles */
+/* Global Styles - Bauhaus Edition */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-	/* Color palette - Soft and calm */
-	--primary: #ffb4d6;
-	--primary-dark: #ff9bc5;
-	--primary-light: #ffd1dc;
+	/* Bauhaus Color Palette */
+	--bg-color: #F2F2F2;
+	--line-color: #1A1A1A;
+	--primary-red: #E63946;
+	--primary-blue: #1D3557;
+	--primary-yellow: #FFB703;
+	--primary-black: #1A1A1A;
 
-	--secondary: #a8d8ff;
-	--accent: #ff6b6b;
+	/* Legacy mappings for existing components */
+	--primary: #E63946;
+	--primary-dark: #c5303c;
+	--primary-light: #FFB703;
 
-	--text-primary: #333333;
-	--text-secondary: #666666;
-	--text-tertiary: #999999;
+	--secondary: #1D3557;
+	--accent: #E63946;
 
-	--bg-primary: #ffffff;
-	--bg-secondary: #f9f8f7;
-	--bg-tertiary: #f5f1f0;
+	--text-primary: #1A1A1A;
+	--text-secondary: #444444;
+	--text-tertiary: #888888;
 
-	--border-light: #f0f0f0;
-	--border-medium: #e0e0e0;
+	--bg-primary: #F2F2F2;
+	--bg-secondary: #E8E8E8;
+	--bg-tertiary: #F2F2F2;
 
-	/* Typography */
-	--font-family:
-		-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-		"Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-	--font-mono: "Menlo", "Monaco", "Courier New", monospace;
+	--border-light: #1A1A1A;
+	--border-medium: #1A1A1A;
+
+	/* Typography - Bauhaus */
+	--font-family: 'Montserrat', 'Futura', 'Inter', sans-serif;
+	--font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
 	/* Spacing */
 	--spacing-xs: 4px;
@@ -34,16 +42,16 @@
 	--spacing-xl: 24px;
 	--spacing-2xl: 32px;
 
-	/* Border radius */
-	--radius-sm: 4px;
-	--radius-md: 8px;
-	--radius-lg: 12px;
-	--radius-xl: 16px;
+	/* No border radius - strict Bauhaus */
+	--radius-sm: 0;
+	--radius-md: 0;
+	--radius-lg: 0;
+	--radius-xl: 0;
 
-	/* Shadows */
-	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-	--shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
-	--shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+	/* No shadows - strict Bauhaus */
+	--shadow-sm: none;
+	--shadow-md: none;
+	--shadow-lg: none;
 
 	/* Transitions */
 	--duration-fast: 0.15s;
@@ -52,33 +60,16 @@
 	--easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Theme */
-:root.theme-dark {
-	--primary: #ff9bc5;
-	--primary-dark: #ff82b5;
-	--primary-light: #ffb4d6;
-
-	--secondary: #5fa8e8;
-	--accent: #ff8787;
-
-	--text-primary: #e8e8e8;
-	--text-secondary: #b8b8b8;
-	--text-tertiary: #888888;
-
-	--bg-primary: #1a1a1a;
-	--bg-secondary: #242424;
-	--bg-tertiary: #2a2a2a;
-
-	--border-light: #333333;
-	--border-medium: #414141;
-
-	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-	--shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
-	--shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
+/* Bauhaus strict rules: no border radius, no shadows */
+* {
+	border-radius: 0 !important;
+	box-shadow: none !important;
 }
 
 /* CSS Reset */
-* {
+*,
+*::before,
+*::after {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -90,22 +81,24 @@ html {
 
 body {
 	font-family: var(--font-family);
-	background-color: var(--bg-tertiary);
+	background-color: var(--bg-color);
 	color: var(--text-primary);
-	line-height: 1.6;
+	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography */
+/* Typography - Bauhaus */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	line-height: 1.2;
-	font-weight: 600;
+	line-height: 1.1;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
 }
 
 h1 {
@@ -113,26 +106,26 @@ h1 {
 }
 
 h2 {
-	font-size: 28px;
+	font-size: 24px;
 }
 
 h3 {
-	font-size: 20px;
+	font-size: 14px;
+	letter-spacing: 0.15em;
 }
 
 p {
 	margin: 0;
-	line-height: 1.6;
+	line-height: 1.5;
 }
 
 a {
-	color: var(--primary);
+	color: var(--primary-red);
 	text-decoration: none;
-	transition: color var(--duration-base) var(--easing);
 }
 
 a:hover {
-	color: var(--primary-dark);
+	text-decoration: underline;
 }
 
 /* Form elements */
@@ -142,6 +135,7 @@ select {
 	font-family: inherit;
 	font-size: inherit;
 	color: inherit;
+	border-radius: 0 !important;
 }
 
 input::-webkit-outer-spin-button,
@@ -156,27 +150,26 @@ input[type="number"] {
 
 /* Selection */
 ::selection {
-	background-color: var(--primary);
-	color: var(--text-primary);
+	background-color: var(--primary-yellow);
+	color: var(--primary-black);
 }
 
-/* Scrollbar */
+/* Scrollbar - Bauhaus minimal */
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	width: 4px;
+	height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--bg-secondary);
+	background: var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--border-medium);
-	border-radius: 4px;
+	background: var(--line-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--text-tertiary);
+	background: var(--primary-red);
 }
 
 /* Utility animations */
@@ -220,22 +213,27 @@ input[type="number"] {
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--text-primary: #f5f5f5;
-		--text-secondary: #b0b0b0;
-		--text-tertiary: #808080;
+/* Bauhaus sidebar block pattern */
+.sidebar-block {
+	border: 1px solid var(--line-color);
+	padding: 20px;
+	margin-bottom: -1px;
+}
 
-		--bg-primary: #1a1a1a;
-		--bg-secondary: #2a2a2a;
-		--bg-tertiary: #1f1f1f;
+/* Bauhaus button */
+.btn-bauhaus {
+	background: var(--line-color);
+	color: #F2F2F2;
+	border: none;
+	font-family: var(--font-family);
+	text-transform: uppercase;
+	padding: 10px 20px;
+	letter-spacing: 0.1em;
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 12px;
+}
 
-		--border-light: #333333;
-		--border-medium: #404040;
-	}
-
-	body {
-		background-color: var(--bg-tertiary);
-		color: var(--text-primary);
-	}
+.btn-bauhaus:hover {
+	background: var(--primary-red);
 }
