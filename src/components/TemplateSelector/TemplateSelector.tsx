@@ -1,10 +1,7 @@
-/**
- * TemplateSelector Component
- * Allows user to switch between templates
- */
-
-import React, { useState } from "react";
+import React from "react";
 import type { Template } from "../../types/models";
+import { Trash2, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import "./TemplateSelector.css";
 
 interface TemplateSelectorProps {
@@ -13,7 +10,6 @@ interface TemplateSelectorProps {
 	onTemplateSelect: (templateId: string) => void;
 	onTemplateDelete: (templateId: string) => void;
 	isDefaultTemplate: (templateId: string) => boolean;
-	hasUnsavedChanges?: boolean;
 }
 
 export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
@@ -22,75 +18,50 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 	onTemplateSelect,
 	onTemplateDelete,
 	isDefaultTemplate,
-	hasUnsavedChanges = false,
 }) => {
-	const [showConfirm, setShowConfirm] = useState(false);
-	const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
-
-	const handleTemplateClick = (templateId: string) => {
-		if (hasUnsavedChanges && currentTemplateId !== templateId) {
-			setSelectedTemplateId(templateId);
-			setShowConfirm(true);
-		} else {
-			onTemplateSelect(templateId);
-			setShowConfirm(false);
-		}
-	};
-
-	const confirmSwitch = () => {
-		if (selectedTemplateId) {
-			onTemplateSelect(selectedTemplateId);
-		}
-		setShowConfirm(false);
-		setSelectedTemplateId(null);
-	};
-
 	return (
-		<div className="template-selector">
-			<h3>Templates</h3>
-			<div className="template-buttons">
-				{templates.map((template) => (
-					<div key={template.id} className="template-item">
-						<button
-							className={`template-btn ${currentTemplateId === template.id ? "active" : ""}`}
-							onClick={() => handleTemplateClick(template.id)}
-						>
-							{template.name}
-						</button>
-						{!isDefaultTemplate(template.id) && (
-							<button
-								className="delete-template-btn"
-								onClick={() => {
-									if (
-										confirm(`"${template.name}" template'ini silmek istediğinizden emin misiniz?`)
-									) {
-										onTemplateDelete(template.id);
-									}
-								}}
-								title="Template'i sil"
-							>
-								✕
-							</button>
-						)}
-					</div>
-				))}
+		<div className="template-selector-premium">
+			<div className="template-header">
+				<h3>Routine Templates</h3>
 			</div>
-
-			{showConfirm && (
-				<div className="confirm-dialog">
-					<div className="confirm-content">
-						<p>Switch template? Current blocks will be replaced.</p>
-						<div className="confirm-actions">
-							<button className="btn-confirm" onClick={confirmSwitch}>
-								Switch
-							</button>
-							<button className="btn-cancel" onClick={() => setShowConfirm(false)}>
-								Cancel
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			<div className="template-grid">
+				<AnimatePresence mode="popLayout">
+					{templates.map((template) => (
+						<motion.div 
+							layout
+							key={template.id} 
+							className={`template-card ${currentTemplateId === template.id ? 'active' : ''}`}
+							initial={{ opacity: 0, scale: 0.9 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.9 }}
+							onClick={() => onTemplateSelect(template.id)}
+						>
+							<div className="template-info">
+								<span className="template-name">{template.name}</span>
+								<span className="template-meta">{template.blocks.length} blocks</span>
+							</div>
+							
+							<div className="template-actions">
+								{currentTemplateId === template.id ? (
+									<CheckCircle2 size={18} className="active-icon" />
+								) : !isDefaultTemplate(template.id) && (
+									<button
+										className="delete-btn-sm"
+										onClick={(e) => {
+											e.stopPropagation();
+											if (confirm(`Delete "${template.name}"?`)) {
+												onTemplateDelete(template.id);
+											}
+										}}
+									>
+										<Trash2 size={16} />
+									</button>
+								)}
+							</div>
+						</motion.div>
+					))}
+				</AnimatePresence>
+			</div>
 		</div>
 	);
 };

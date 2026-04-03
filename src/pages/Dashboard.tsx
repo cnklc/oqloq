@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import type { RoutineBlock, Template, Todo } from "../types/models";
-import { useRoutineBlocks } from "../hooks/useRoutineBlocks";
+import type { RoutineBlock, Todo } from "../types/models";
+import { useRoutineStore } from "../hooks/useRoutineStore";
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { Clock } from "../components/Clock/Clock";
 import { BlockEditor } from "../components/BlockEditor/BlockEditor";
@@ -8,25 +8,29 @@ import { TemplateSelector } from "../components/TemplateSelector/TemplateSelecto
 import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
 import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
-import {
-	switchTemplate,
-	getCurrentTemplate,
-	getAllTemplates,
-	createTemplateFromBlocks,
-	deleteTemplate,
-	isDefaultTemplate,
-} from "../services/templateService";
 import { minutesToTimeString, isTimeInBlock } from "../services/clockService";
+import { motion, AnimatePresence } from "framer-motion";
+import { Settings, Save } from "lucide-react";
+import { ThemeToggle } from "../components/ThemeToggle/ThemeToggle";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
-	const { blocks, addBlock, updateBlock, deleteBlock, setBlocks } = useRoutineBlocks();
+	const { 
+		blocks, 
+		addBlock, 
+		updateBlock, 
+		deleteBlock, 
+		templates, 
+		applyTemplate, 
+		saveCurrentAsTemplate, 
+		deleteTemplate,
+		activeTemplateId 
+	} = useRoutineStore();
+	
 	const { currentMinute, currentTimeFormatted } = useCurrentTime();
 
 	const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 	const [isEditing, setIsEditing] = useState(false);
-	const [currentTemplateId, setCurrentTemplateId] = useState(getCurrentTemplate().id);
-	const [templates, setTemplates] = useState<Template[]>(getAllTemplates());
 	const [showSaveTemplate, setShowSaveTemplate] = useState(false);
 	const [saveTemplateName, setSaveTemplateName] = useState("");
 	const [showSettings, setShowSettings] = useState(false);
@@ -63,13 +67,8 @@ export const Dashboard: React.FC = () => {
 		setSelectedBlockId(null);
 	};
 
-	const handleTemplateSwitch = (templateId: string) => {
-		const newBlocks = switchTemplate(templateId);
-		setBlocks(newBlocks);
-		setCurrentTemplateId(templateId);
-		setIsEditing(false);
-		setSelectedBlockId(null);
-	};
+	const handleTemplateSwitch = (id: string) => applyTemplate(id);
+	const handleTemplateDelete = (id: string) => deleteTemplate(id);
 
 	const handleSaveAsTemplate = () => {
 		if (!saveTemplateName.trim()) {
@@ -77,24 +76,10 @@ export const Dashboard: React.FC = () => {
 			return;
 		}
 
-		const newTemplate = createTemplateFromBlocks(saveTemplateName.trim(), blocks);
-		setTemplates(getAllTemplates());
+		saveCurrentAsTemplate(saveTemplateName.trim());
 		setShowSaveTemplate(false);
 		setSaveTemplateName("");
-		alert(`"${newTemplate.name}" template olarak kaydedildi!`);
-	};
-
-	const handleDeleteTemplate = (templateId: string) => {
-		const deleted = deleteTemplate(templateId);
-		if (deleted) {
-			// If deleted template was active, switch to student template
-			if (currentTemplateId === templateId) {
-				const newBlocks = switchTemplate("student");
-				setBlocks(newBlocks);
-				setCurrentTemplateId("student");
-			}
-			setTemplates(getAllTemplates());
-		}
+		alert(`"${saveTemplateName}" template olarak kaydedildi!`);
 	};
 
 	const handleAddTodo = (blockId: string, todoText: string) => {
@@ -107,12 +92,9 @@ export const Dashboard: React.FC = () => {
 			completed: false,
 		};
 
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: [...(block.todos || []), newTodo],
-		};
-
-		updateBlock(blockId, updatedBlock);
+		updateBlock(blockId, {
+			todos: [...(block.todos || []), newTodo]
+		});
 	};
 
 	const handleToggleTodo = (blockId: string, todoId: string) => {
@@ -123,12 +105,7 @@ export const Dashboard: React.FC = () => {
 			todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
 		);
 
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: updatedTodos,
-		};
-
-		updateBlock(blockId, updatedBlock);
+		updateBlock(blockId, { todos: updatedTodos });
 	};
 
 	const handleDeleteTodo = (blockId: string, todoId: string) => {
@@ -137,45 +114,66 @@ export const Dashboard: React.FC = () => {
 
 		const updatedTodos = (block.todos || []).filter((todo) => todo.id !== todoId);
 
-		const updatedBlock: RoutineBlock = {
-			...block,
-			todos: updatedTodos,
-		};
-
-		updateBlock(blockId, updatedBlock);
+		updateBlock(blockId, { todos: updatedTodos });
 	};
 
 	const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
 	const selectedStartMinute = selectedBlock
 		? selectedBlock.startMinute
-		: Math.round(currentMinute / 30) * 30; // Round to nearest 30 min for new blocks
+		: Math.round(currentMinute / 30) * 30;
 
 	return (
 		<div className="dashboard">
 			<header className="dashboard-header">
-				<div className="header-content">
+				<motion.div 
+					initial={{ opacity: 0, y: -20 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="header-content"
+				>
 					<h1>Oqloq</h1>
 					<p className="tagline">24-Hour Creative Routine Clock</p>
-				</div>
-				<div className="time-display">
-					<div className="current-time">{currentTimeFormatted}</div>
-					{activeBlock && <div className="active-block">Now: {activeBlock.title}</div>}
-				</div>
-				<div className="header-settings">
-					<button
-						className="settings-icon-btn"
-						onClick={() => setShowSettings(!showSettings)}
-						aria-label="Open settings"
-						title="Settings"
+				</motion.div>
+				
+				<div className="time-display-container">
+					<motion.div 
+						key={currentTimeFormatted}
+						initial={{ opacity: 0, scale: 0.9 }}
+						animate={{ opacity: 1, scale: 1 }}
+						className="current-time-glow"
 					>
-						⚙️
+						{currentTimeFormatted}
+					</motion.div>
+					<AnimatePresence mode="wait">
+						{activeBlock && (
+							<motion.div 
+								key={activeBlock.id}
+								initial={{ opacity: 0, x: 20 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: -20 }}
+								className="active-block-indicator"
+								style={{ color: activeBlock.color }}
+							>
+								Now: {activeBlock.title}
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</div>
+
+				<div className="header-actions">
+					<ThemeToggle />
+					<button
+						className="icon-btn"
+						onClick={() => setShowSettings(!showSettings)}
+						aria-label="Settings"
+					>
+						<Settings size={20} />
 					</button>
 				</div>
 			</header>
 
 			<div className="dashboard-content">
 				<main className="main-section">
-					<div className="clock-wrapper">
+					<div className="clock-container-outer">
 						<Clock
 							blocks={blocks}
 							currentMinute={currentMinute}
@@ -186,120 +184,105 @@ export const Dashboard: React.FC = () => {
 					</div>
 				</main>
 
-				<aside className="todos-panel">
-					<ActiveBlockTodos
-						activeBlock={activeBlock || null}
-						onAddTodo={handleAddTodo}
-						onToggleTodo={handleToggleTodo}
-						onDeleteTodo={handleDeleteTodo}
-					/>
+				<aside className="glass-panel right-panel">
+					<div className="panel-tabs">
+						<ActiveBlockTodos
+							activeBlock={activeBlock || null}
+							onAddTodo={handleAddTodo}
+							onToggleTodo={handleToggleTodo}
+							onDeleteTodo={handleDeleteTodo}
+						/>
+					</div>
 				</aside>
 
-				<aside className="sidebar">
+				<aside className="glass-panel left-panel">
 					<TemplateSelector
 						templates={templates}
-						currentTemplateId={currentTemplateId}
+						currentTemplateId={activeTemplateId || ""}
 						onTemplateSelect={handleTemplateSwitch}
-						onTemplateDelete={handleDeleteTemplate}
-						isDefaultTemplate={isDefaultTemplate}
-						hasUnsavedChanges={false}
+						onTemplateDelete={handleTemplateDelete}
+						isDefaultTemplate={(id) => ["student", "professional"].includes(id)}
 					/>
 
-					{isEditing && (
-						<BlockEditor
-							block={selectedBlock}
-							onSave={handleSaveBlock}
-							onCancel={() => {
-								setIsEditing(false);
-								setSelectedBlockId(null);
-							}}
-							onDelete={handleDeleteBlock}
-							initialStartMinute={selectedStartMinute}
-						/>
-					)}
+					<AnimatePresence>
+						{isEditing && (
+							<motion.div
+								initial={{ opacity: 0, height: 0 }}
+								animate={{ opacity: 1, height: "auto" }}
+								exit={{ opacity: 0, height: 0 }}
+							>
+								<BlockEditor
+									block={selectedBlock}
+									onSave={handleSaveBlock}
+									onCancel={() => {
+										setIsEditing(false);
+										setSelectedBlockId(null);
+									}}
+									onDelete={handleDeleteBlock}
+									initialStartMinute={selectedStartMinute}
+								/>
+							</motion.div>
+						)}
+					</AnimatePresence>
 
 					{selectedBlockId && !isEditing && (
-						<div className="block-details">
+						<motion.div 
+							initial={{ opacity: 0, x: -20 }}
+							animate={{ opacity: 1, x: 0 }}
+							className="block-info-card"
+						>
 							{selectedBlock && (
 								<>
-									<h3>{selectedBlock.title}</h3>
-									<p className="block-time">
+									<div className="block-info-header">
+										<div className="color-dot" style={{ backgroundColor: selectedBlock.color }} />
+										<h3>{selectedBlock.title}</h3>
+									</div>
+									<p className="block-time-range">
 										{minutesToTimeString(selectedBlock.startMinute)} -{" "}
 										{minutesToTimeString(selectedBlock.endMinute)}
 									</p>
-									<div style={{ marginBottom: "12px" }}>
-										<div
-											className="color-preview"
-											style={{ backgroundColor: selectedBlock.color }}
-										/>
-									</div>
 									<button
-										className="btn btn-primary"
+										className="btn-premium"
 										onClick={() => setIsEditing(true)}
-										style={{ width: "100%" }}
 									>
-										Edit
+										Edit Block
 									</button>
 								</>
 							)}
-						</div>
+						</motion.div>
 					)}
 
 					{!selectedBlockId && !isEditing && (
-						<div className="sidebar-hint">
-							<p>Click on the clock to create or edit a block</p>
+						<div className="empty-state-hint">
+							<p>Click the outer ring to create a block</p>
 							<button
-								className="btn btn-secondary"
+								className="btn-outline"
 								onClick={() => setShowSaveTemplate(true)}
-								style={{ marginTop: "16px", width: "100%" }}
 							>
-								💾 Template Olarak Kaydet
+								<Save size={16} /> Save as Template
 							</button>
 						</div>
 					)}
 
 					{showSaveTemplate && (
-						<div className="save-template-dialog">
-							<div className="save-template-content">
-								<h3>Template Olarak Kaydet</h3>
-								<input
-									type="text"
-									placeholder="Template adını girin"
-									value={saveTemplateName}
-									onChange={(e) => setSaveTemplateName(e.target.value)}
-									onKeyPress={(e) => e.key === "Enter" && handleSaveAsTemplate()}
-									autoFocus
-									style={{
-										padding: "10px 12px",
-										borderRadius: "8px",
-										border: "1px solid #e0e0e0",
-										fontSize: "14px",
-										marginBottom: "12px",
-										width: "100%",
-										color: "#000000",
-									}}
-								/>
-								<div style={{ display: "flex", gap: "8px" }}>
-									<button
-										className="btn btn-primary"
-										onClick={handleSaveAsTemplate}
-										style={{ flex: 1 }}
-									>
-										Kaydet
-									</button>
-									<button
-										className="btn btn-secondary"
-										onClick={() => {
-											setShowSaveTemplate(false);
-											setSaveTemplateName("");
-										}}
-										style={{ flex: 1 }}
-									>
-										İptal
-									</button>
-								</div>
+						<motion.div 
+							initial={{ opacity: 0, scale: 0.95 }}
+							animate={{ opacity: 1, scale: 1 }}
+							className="glass-modal"
+						>
+							<h3>Save Template</h3>
+							<input
+								type="text"
+								placeholder="Template Name"
+								value={saveTemplateName}
+								onChange={(e) => setSaveTemplateName(e.target.value)}
+								autoFocus
+							/>
+							<div className="modal-actions">
+								<button className="btn-primary" onClick={handleSaveAsTemplate}>Save</button>
+								<button className="btn-ghost" onClick={() => setShowSaveTemplate(false)}>Cancel</button>
 							</div>
-						</div>
+						</motion.div>
 					)}
 				</aside>
 			</div>

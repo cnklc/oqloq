@@ -1,0 +1,26 @@
+.theme-toggle-btn {
+	background: var(--bg-glass);
+	backdrop-filter: blur(8px);
+	border: 1px solid var(--border);
+	padding: 10px;
+	border-radius: 12px;
+	cursor: pointer;
+	color: var(--text-secondary);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 44px;
+	height: 44px;
+	position: relative;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:hover {
+	color: var(--primary);
+	border-color: var(--primary);
+}
+
+.theme-toggle-btn:active {
+	background: var(--primary-light);
+}
