@@ -8,9 +8,9 @@ import { TemplateSelector } from "../components/TemplateSelector/TemplateSelecto
 import { ActiveBlockTodos } from "../components/ActiveBlockTodos/ActiveBlockTodos";
 import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
-import { minutesToTimeString, isTimeInBlock } from "../services/clockService";
+import { isTimeInBlock } from "../services/clockService";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, Save } from "lucide-react";
+import { Settings, Save, Library, ListTodo, ChevronLeft, ChevronRight } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeToggle/ThemeToggle";
 import "./Dashboard.css";
 
@@ -34,6 +34,9 @@ export const Dashboard: React.FC = () => {
 	const [showSaveTemplate, setShowSaveTemplate] = useState(false);
 	const [saveTemplateName, setSaveTemplateName] = useState("");
 	const [showSettings, setShowSettings] = useState(false);
+	
+	const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(false);
+	const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
 
 	// Find current active block
 	const activeBlock = blocks.find((block) =>
@@ -124,92 +127,157 @@ export const Dashboard: React.FC = () => {
 
 	return (
 		<div className="dashboard">
-			<header className="dashboard-header">
-				<motion.div 
-					initial={{ opacity: 0, y: -20 }}
-					animate={{ opacity: 1, y: 0 }}
-					className="header-content"
-				>
+			<header className="minimal-header">
+				<div className="header-brand">
 					<h1>Oqloq</h1>
-					<p className="tagline">24-Hour Creative Routine Clock</p>
-				</motion.div>
+				</div>
 				
-				<div className="time-display-container">
+				<div className="focused-time">
 					<motion.div 
 						key={currentTimeFormatted}
-						initial={{ opacity: 0, scale: 0.9 }}
-						animate={{ opacity: 1, scale: 1 }}
-						className="current-time-glow"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						className="time-text-main"
 					>
 						{currentTimeFormatted}
 					</motion.div>
+				</div>
+
+				<div className="header-meta">
 					<AnimatePresence mode="wait">
 						{activeBlock && (
 							<motion.div 
 								key={activeBlock.id}
-								initial={{ opacity: 0, x: 20 }}
-								animate={{ opacity: 1, x: 0 }}
-								exit={{ opacity: 0, x: -20 }}
-								className="active-block-indicator"
+								initial={{ opacity: 0, scale: 0.95 }}
+								animate={{ opacity: 1, scale: 1 }}
+								exit={{ opacity: 0, scale: 0.95 }}
+								className="active-block-status"
 								style={{ color: activeBlock.color }}
 							>
-								Now: {activeBlock.title}
+								{activeBlock.title}
 							</motion.div>
 						)}
 					</AnimatePresence>
 				</div>
-
-				<div className="header-actions">
-					<ThemeToggle />
-					<button
-						className="icon-btn"
-						onClick={() => setShowSettings(!showSettings)}
-						aria-label="Settings"
-					>
-						<Settings size={20} />
-					</button>
-				</div>
 			</header>
 
-			<div className="dashboard-content">
-				<main className="main-section">
-					<div className="clock-container-outer">
-						<Clock
-							blocks={blocks}
-							currentMinute={currentMinute}
-							onBlockClick={handleBlockClick}
-							onEmptyClick={handleEmptyClick}
-							selectedBlockId={selectedBlockId || undefined}
-						/>
-					</div>
+			<nav className="floating-navbar glass-panel">
+				<button 
+					className={`nav-btn ${isLeftDrawerOpen ? 'active' : ''}`}
+					onClick={() => {
+						setIsLeftDrawerOpen(!isLeftDrawerOpen);
+						setIsRightDrawerOpen(false);
+					}}
+					title="Templates Library"
+				>
+					<Library size={20} />
+				</button>
+				
+				<button 
+					className={`nav-btn ${isRightDrawerOpen ? 'active' : ''}`}
+					onClick={() => {
+						setIsRightDrawerOpen(!isRightDrawerOpen);
+						setIsLeftDrawerOpen(false);
+					}}
+					title="Current Tasks"
+				>
+					<ListTodo size={20} />
+				</button>
+
+				<div className="nav-divider" />
+				
+				<ThemeToggle />
+				
+				<button
+					className="nav-btn"
+					onClick={() => setShowSettings(!showSettings)}
+					title="Settings"
+				>
+					<Settings size={20} />
+				</button>
+			</nav>
+
+			<div className="focused-content">
+				<main className="clock-stage">
+					<Clock
+						blocks={blocks}
+						currentMinute={currentMinute}
+						onBlockClick={handleBlockClick}
+						onEmptyClick={handleEmptyClick}
+						selectedBlockId={selectedBlockId || undefined}
+					/>
 				</main>
 
-				<aside className="glass-panel right-panel">
-					<div className="panel-tabs">
-						<ActiveBlockTodos
-							activeBlock={activeBlock || null}
-							onAddTodo={handleAddTodo}
-							onToggleTodo={handleToggleTodo}
-							onDeleteTodo={handleDeleteTodo}
-						/>
-					</div>
-				</aside>
+				{/* Left Drawer: Templates */}
+				<AnimatePresence>
+					{isLeftDrawerOpen && (
+						<motion.aside 
+							initial={{ x: -400, opacity: 0 }}
+							animate={{ x: 0, opacity: 1 }}
+							exit={{ x: -400, opacity: 0 }}
+							transition={{ type: "spring", damping: 25, stiffness: 200 }}
+							className="glass-panel side-drawer left"
+						>
+							<div className="drawer-header">
+								<button className="close-drawer-btn" onClick={() => setIsLeftDrawerOpen(false)}>
+									<ChevronLeft size={24} />
+								</button>
+							</div>
+							<TemplateSelector
+								templates={templates}
+								currentTemplateId={activeTemplateId || ""}
+								onTemplateSelect={(id) => {
+									handleTemplateSwitch(id);
+									setIsLeftDrawerOpen(false);
+								}}
+								onTemplateDelete={handleTemplateDelete}
+								isDefaultTemplate={(id) => ["student", "professional"].includes(id)}
+							/>
+							
+							<div className="drawer-footer">
+								<button className="btn-premium w-full" onClick={() => setShowSaveTemplate(true)}>
+									<Save size={16} /> Save Pattern
+								</button>
+							</div>
+						</motion.aside>
+					)}
+				</AnimatePresence>
 
-				<aside className="glass-panel left-panel">
-					<TemplateSelector
-						templates={templates}
-						currentTemplateId={activeTemplateId || ""}
-						onTemplateSelect={handleTemplateSwitch}
-						onTemplateDelete={handleTemplateDelete}
-						isDefaultTemplate={(id) => ["student", "professional"].includes(id)}
-					/>
+				{/* Right Drawer: Tasks & Editing */}
+				<AnimatePresence>
+					{isRightDrawerOpen && (
+						<motion.aside 
+							initial={{ x: 400, opacity: 0 }}
+							animate={{ x: 0, opacity: 1 }}
+							exit={{ x: 400, opacity: 0 }}
+							transition={{ type: "spring", damping: 25, stiffness: 200 }}
+							className="glass-panel side-drawer right"
+						>
+							<div className="drawer-header">
+								<button className="close-drawer-btn" onClick={() => setIsRightDrawerOpen(false)}>
+									<ChevronRight size={24} />
+								</button>
+							</div>
 
-					<AnimatePresence>
-						{isEditing && (
+							<ActiveBlockTodos
+								activeBlock={activeBlock || null}
+								onAddTodo={handleAddTodo}
+								onToggleTodo={handleToggleTodo}
+								onDeleteTodo={handleDeleteTodo}
+							/>
+						</motion.aside>
+					)}
+				</AnimatePresence>
+
+				{/* Focused Editor Overlay */}
+				<AnimatePresence>
+					{isEditing && (
+						<div className="editor-overlay-focused">
 							<motion.div
-								initial={{ opacity: 0, height: 0 }}
-								animate={{ opacity: 1, height: "auto" }}
-								exit={{ opacity: 0, height: 0 }}
+								initial={{ opacity: 0, scale: 0.9, y: 20 }}
+								animate={{ opacity: 1, scale: 1, y: 0 }}
+								exit={{ opacity: 0, scale: 0.9, y: 20 }}
+								className="editor-modal-container"
 							>
 								<BlockEditor
 									block={selectedBlock}
@@ -222,69 +290,37 @@ export const Dashboard: React.FC = () => {
 									initialStartMinute={selectedStartMinute}
 								/>
 							</motion.div>
-						)}
-					</AnimatePresence>
-
-					{selectedBlockId && !isEditing && (
-						<motion.div 
-							initial={{ opacity: 0, x: -20 }}
-							animate={{ opacity: 1, x: 0 }}
-							className="block-info-card"
-						>
-							{selectedBlock && (
-								<>
-									<div className="block-info-header">
-										<div className="color-dot" style={{ backgroundColor: selectedBlock.color }} />
-										<h3>{selectedBlock.title}</h3>
-									</div>
-									<p className="block-time-range">
-										{minutesToTimeString(selectedBlock.startMinute)} -{" "}
-										{minutesToTimeString(selectedBlock.endMinute)}
-									</p>
-									<button
-										className="btn-premium"
-										onClick={() => setIsEditing(true)}
-									>
-										Edit Block
-									</button>
-								</>
-							)}
-						</motion.div>
-					)}
-
-					{!selectedBlockId && !isEditing && (
-						<div className="empty-state-hint">
-							<p>Click the outer ring to create a block</p>
-							<button
-								className="btn-outline"
-								onClick={() => setShowSaveTemplate(true)}
-							>
-								<Save size={16} /> Save as Template
-							</button>
 						</div>
 					)}
+				</AnimatePresence>
 
+				{/* Save Template Modal */}
+				<AnimatePresence>
 					{showSaveTemplate && (
-						<motion.div 
-							initial={{ opacity: 0, scale: 0.95 }}
-							animate={{ opacity: 1, scale: 1 }}
-							className="glass-modal"
-						>
-							<h3>Save Template</h3>
-							<input
-								type="text"
-								placeholder="Template Name"
-								value={saveTemplateName}
-								onChange={(e) => setSaveTemplateName(e.target.value)}
-								autoFocus
-							/>
-							<div className="modal-actions">
-								<button className="btn-primary" onClick={handleSaveAsTemplate}>Save</button>
-								<button className="btn-ghost" onClick={() => setShowSaveTemplate(false)}>Cancel</button>
-							</div>
-						</motion.div>
+						<div className="editor-overlay-focused">
+							<motion.div 
+								initial={{ opacity: 0, scale: 0.95 }}
+								animate={{ opacity: 1, scale: 1 }}
+								exit={{ opacity: 0, scale: 0.95 }}
+								className="glass-modal"
+							>
+								<h3>Save Template</h3>
+								<input
+									type="text"
+									placeholder="Template Name"
+									value={saveTemplateName}
+									onChange={(e) => setSaveTemplateName(e.target.value)}
+									className="premium-input"
+									autoFocus
+								/>
+								<div className="modal-actions">
+									<button className="btn-premium flex-1" onClick={handleSaveAsTemplate}>Save</button>
+									<button className="btn-ghost" onClick={() => setShowSaveTemplate(false)}>Cancel</button>
+								</div>
+							</motion.div>
+						</div>
 					)}
-				</aside>
+				</AnimatePresence>
 			</div>
 
 			<PomodoroTimer />
