@@ -12,8 +12,26 @@ import {
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useAppearanceStore } from "../../hooks/useAppearanceStore";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
-import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer } from "lucide-react";
+import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer, Pipette } from "lucide-react";
 import "./SettingsSidebar.css";
+
+const BG_PRESETS = [
+	"#FFD200", // Oqloq Yellow
+	"#F2F2F7", // iOS Grey
+	"#000000", // Pitch Black
+	"#2C3E50", // Midnight Blue
+	"#E8F5E9", // Mint Green
+	"#FFF0F0", // Soft Rose
+];
+
+const CLOCK_PRESETS = [
+	"#ffffff", // Pure White
+	"#FDFCF0", // Cream
+	"#FFEB3B", // Vivid Yellow
+	"#E1F5FE", // Sky Blue
+	"#1C1C1E", // Dark Slate
+	"transparent" // Ghost mode
+];
 
 interface SettingsSidebarProps {
 	isOpen: boolean;
@@ -103,10 +121,22 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 
 						<div className="setting-item">
 							<label>Background Color</label>
+							<div className="color-presets-grid">
+								{BG_PRESETS.map(c => (
+									<button 
+										key={c}
+										className={`preset-swatch ${backgroundColor === c ? 'active' : ''}`}
+										style={{ backgroundColor: c === 'transparent' ? 'rgba(0,0,0,0.05)' : c }}
+										onClick={() => setBackgroundColor(c)}
+										title={c}
+									/>
+								))}
+							</div>
 							<div className="color-picker-group">
+								<Pipette size={14} className="picker-icon" />
 								<input 
 									type="color" 
-									value={backgroundColor} 
+									value={backgroundColor.startsWith('#') ? backgroundColor : '#ffffff'} 
 									onChange={(e) => setBackgroundColor(e.target.value)}
 									className="premium-color-input"
 								/>
@@ -116,10 +146,22 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 
 						<div className="setting-item">
 							<label>Clock Face Color</label>
+							<div className="color-presets-grid">
+								{CLOCK_PRESETS.map(c => (
+									<button 
+										key={c}
+										className={`preset-swatch ${clockFaceColor === c ? 'active' : ''}`}
+										style={{ backgroundColor: c === 'transparent' ? 'rgba(0,0,0,0.05)' : c }}
+										onClick={() => setClockFaceColor(c)}
+										title={c}
+									/>
+								))}
+							</div>
 							<div className="color-picker-group">
+								<Pipette size={14} className="picker-icon" />
 								<input 
 									type="color" 
-									value={clockFaceColor} 
+									value={clockFaceColor.startsWith('#') ? clockFaceColor : '#ffffff'} 
 									onChange={(e) => setClockFaceColor(e.target.value)}
 									className="premium-color-input"
 								/>
