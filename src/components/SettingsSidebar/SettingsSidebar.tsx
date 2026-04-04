@@ -12,7 +12,7 @@ import {
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useAppearanceStore } from "../../hooks/useAppearanceStore";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
-import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw } from "lucide-react";
+import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer } from "lucide-react";
 import "./SettingsSidebar.css";
 
 interface SettingsSidebarProps {
@@ -29,8 +29,10 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 	const { 
 		backgroundColor, 
 		clockFaceColor, 
+		clockScale,
 		setBackgroundColor, 
 		setClockFaceColor, 
+		setClockScale,
 		resetAppearance 
 	} = useAppearanceStore();
 
@@ -125,30 +127,66 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							</div>
 						</div>
 						
+						<div className="setting-item">
+							<label>Clock Size ({Math.round(clockScale * 100)}%)</label>
+							<div className="range-group">
+								<input 
+									type="range" 
+									min="0.5" 
+									max="1.5" 
+									step="0.05"
+									value={clockScale} 
+									onChange={(e) => setClockScale(parseFloat(e.target.value))}
+									className="premium-range-input"
+								/>
+							</div>
+						</div>
+						
 						<button className="btn-ghost-sm" onClick={resetAppearance}>
 							<RotateCcw size={14} /> Reset Appearance
 						</button>
 					</div>
 
 					<div className="settings-section">
-						<h3>Pomodoro Timer</h3>
+						<div className="section-title-group">
+							<Timer size={16} />
+							<h3>Pomodoro Timer</h3>
+						</div>
 						<div className="setting-item">
 							<label>Work Duration ({pomodoroSettings.workDuration}m)</label>
-							<input
-								type="range"
-								min="1" max="60"
-								value={pomodoroSettings.workDuration}
-								onChange={(e) => handlePomodoroSettingChange("workDuration", Number(e.target.value))}
-							/>
+							<div className="range-group">
+								<input
+									type="range"
+									min="1" max="90"
+									value={pomodoroSettings.workDuration}
+									onChange={(e) => handlePomodoroSettingChange("workDuration", Number(e.target.value))}
+									className="premium-range-input"
+								/>
+							</div>
 						</div>
 						<div className="setting-item">
 							<label>Short Break ({pomodoroSettings.shortBreak}m)</label>
-							<input
-								type="range"
-								min="1" max="30"
-								value={pomodoroSettings.shortBreak}
-								onChange={(e) => handlePomodoroSettingChange("shortBreak", Number(e.target.value))}
-							/>
+							<div className="range-group">
+								<input
+									type="range"
+									min="1" max="30"
+									value={pomodoroSettings.shortBreak}
+									onChange={(e) => handlePomodoroSettingChange("shortBreak", Number(e.target.value))}
+									className="premium-range-input"
+								/>
+							</div>
+						</div>
+						<div className="setting-item">
+							<label>Long Break ({pomodoroSettings.longBreak}m)</label>
+							<div className="range-group">
+								<input
+									type="range"
+									min="1" max="60"
+									value={pomodoroSettings.longBreak}
+									onChange={(e) => handlePomodoroSettingChange("longBreak", Number(e.target.value))}
+									className="premium-range-input"
+								/>
+							</div>
 						</div>
 					</div>
 

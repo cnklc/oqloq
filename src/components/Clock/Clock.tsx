@@ -16,7 +16,7 @@ const CLOCK_SIZE = 640;
 const CENTER_X = CLOCK_SIZE / 2;
 const CENTER_Y = CLOCK_SIZE / 2;
 const MAIN_CIRCLE_RADIUS = 240; // The "Dome"
-const BLOCK_RADIUS = 265; // Reduced gap (was 285)
+const BLOCK_RADIUS = 277.5; // Increased gap by 50% (from 25px to 37.5px)
 const BLOCK_THICKNESS = 8; // Reduced thickness
 
 export const Clock: React.FC<ClockProps> = ({
@@ -32,16 +32,16 @@ export const Clock: React.FC<ClockProps> = ({
 		const items = [];
 		for (let i = 0; i < 24; i++) {
 			const angle = (i / 24) * 360 - 90;
-			
+
 			if (i % 3 === 0) {
 				const labelRad = ((angle) * Math.PI) / 180;
 				const lx = CENTER_X + Math.cos(labelRad) * (MAIN_CIRCLE_RADIUS - 30);
 				const ly = CENTER_Y + Math.sin(labelRad) * (MAIN_CIRCLE_RADIUS - 30);
 				items.push(
-					<text 
-						key={`label-${i}`} 
-						x={lx} y={ly} 
-						textAnchor="middle" 
+					<text
+						key={`label-${i}`}
+						x={lx} y={ly}
+						textAnchor="middle"
 						dominantBaseline="middle"
 						className="clock-label"
 					>
@@ -59,16 +59,16 @@ export const Clock: React.FC<ClockProps> = ({
 		const scale = CLOCK_SIZE / rect.width;
 		const x = (event.clientX - rect.left) * scale - CENTER_X;
 		const y = (event.clientY - rect.top) * scale - CENTER_Y;
-		
+
 		const distance = Math.sqrt(x * x + y * y);
 		const innerR = BLOCK_RADIUS - BLOCK_THICKNESS;
-		
+
 		// If clicked on the segment area
 		if (distance >= innerR - 20 && distance <= BLOCK_RADIUS + 20) {
 			let angle = Math.atan2(y, x) * (180 / Math.PI);
 			angle = (angle + 90 + 360) % 360;
 			const minute = Math.round((angle / 360) * 1440) % 1440;
-			
+
 			const clickedBlock = blocks.find(block => {
 				if (block.startMinute <= block.endMinute) {
 					return minute >= block.startMinute && minute < block.endMinute;
@@ -98,7 +98,7 @@ export const Clock: React.FC<ClockProps> = ({
 					<filter id="domeShadow" x="-20%" y="-20%" width="140%" height="140%">
 						<feDropShadow dx="0" dy="20" stdDeviation="25" floodColor="rgba(0,0,0,0.12)" />
 					</filter>
-					
+
 					<radialGradient id="domeGradient" cx="45%" cy="40%" r="60%">
 						<stop offset="0%" stopColor="white" />
 						<stop offset="100%" stopColor="#f8f9fa" />
@@ -173,7 +173,7 @@ export const Clock: React.FC<ClockProps> = ({
 						x1={CENTER_X}
 						y1={CENTER_Y - (MAIN_CIRCLE_RADIUS * 0.5)} // R=120
 						x2={CENTER_X}
-						y2={CENTER_Y - (MAIN_CIRCLE_RADIUS * 0.5) - ( (BLOCK_RADIUS + 10 - MAIN_CIRCLE_RADIUS * 0.5) * 0.5 )} // R ≈ 207
+						y2={CENTER_Y - (MAIN_CIRCLE_RADIUS * 0.5) - ((BLOCK_RADIUS + 10 - MAIN_CIRCLE_RADIUS * 0.5) * 0.5)} // R ≈ 207
 						stroke="rgba(0, 0, 0, 0.4)"
 						strokeWidth="1.5"
 						strokeLinecap="round"

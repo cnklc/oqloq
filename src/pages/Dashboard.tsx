@@ -28,7 +28,7 @@ export const Dashboard: React.FC = () => {
 	} = useRoutineStore();
 	
 	const { currentMinute, currentTimeFormatted } = useCurrentTime();
-	const { backgroundColor, clockFaceColor } = useAppearanceStore();
+	const { backgroundColor, clockFaceColor, clockScale } = useAppearanceStore();
 
 	const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 	const [isEditing, setIsEditing] = useState(false);
@@ -203,7 +203,10 @@ export const Dashboard: React.FC = () => {
 			</nav>
 
 			<div className="focused-content">
-				<main className="clock-stage">
+				<main 
+					className="clock-stage"
+					style={{ transform: `scale(${clockScale})` }}
+				>
 					<Clock
 						blocks={blocks}
 						currentMinute={currentMinute}
