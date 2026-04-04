@@ -222,17 +222,26 @@
 .premium-input {
 	background: rgba(0,0,0,0.03);
 	border: 1px solid var(--border);
-	padding: 14px 18px;
-	border-radius: 16px;
-	font-size: 1rem;
+	padding: 14px 24px;
+	border-radius: var(--radius-pill);
+	font-size: 0.95rem;
+	font-weight: 700;
 	width: 100%;
-	transition: all 0.2s;
+	outline: none;
+	color: var(--text-primary);
+	transition: all 0.3s;
 }
 
 .premium-input:focus {
-	background: white;
 	border-color: var(--primary);
+	background: var(--bg-primary);
 	box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.modal-actions {
+	display: flex;
+	gap: 12px;
+	margin-top: 12px;
 }
 
 /* Utils */
