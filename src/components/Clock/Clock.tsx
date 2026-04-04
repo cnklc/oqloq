@@ -17,7 +17,7 @@ const CENTER_X = CLOCK_SIZE / 2;
 const CENTER_Y = CLOCK_SIZE / 2;
 const MAIN_CIRCLE_RADIUS = 240; // The "Dome"
 const BLOCK_RADIUS = 285; // Outer ring position
-const BLOCK_THICKNESS = 25; // Segment thickness
+const BLOCK_THICKNESS = 8; // Reduced to ~30% of original (from 25 to 8)
 
 export const Clock: React.FC<ClockProps> = ({
 	blocks,
