@@ -1,20 +1,19 @@
 .settings-sidebar {
 	position: fixed;
-	top: 0;
-	right: -380px;
+	top: 20px;
+	bottom: 20px;
+	right: -400px;
 	width: 360px;
-	height: 100vh;
 	z-index: 2000;
 	padding: 0;
 	transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	display: flex;
 	flex-direction: column;
-	border-radius: 0;
-	border-left: 1px solid var(--border);
+	border-radius: var(--radius-pill);
 }
 
 .settings-sidebar.open {
-	right: 0;
+	right: 20px;
 }
 
 .settings-overlay {
