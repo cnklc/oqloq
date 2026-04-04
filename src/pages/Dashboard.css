@@ -156,9 +156,20 @@
 .close-drawer-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-primary); }
 
 .drawer-footer {
-	margin-top: auto;
-	padding-top: 20px;
+	padding-top: 32px;
 	border-top: 1px solid var(--border);
+	margin-top: auto;
+}
+
+.drawer-footer .btn-premium {
+	width: 100%;
+	padding: 14px 28px;
+	border-radius: var(--radius-pill);
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
 }
 
 /* Editor Overlay */
@@ -196,6 +207,16 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+}
+
+.modal-actions button {
+	flex: 1;
+	padding: 14px 28px;
+	border-radius: var(--radius-pill);
+	font-weight: 700;
+	cursor: pointer;
+	border: none;
+	transition: all 0.3s;
 }
 
 .premium-input {

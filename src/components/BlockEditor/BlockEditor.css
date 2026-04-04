@@ -1,13 +1,16 @@
 .premium-editor {
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: 32px;
+	height: 100%;
 }
 
 .editor-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding-bottom: 0;
+	color: var(--text-primary);
 }
 
 .editor-header h3 {
@@ -23,7 +26,7 @@
 	cursor: pointer;
 	color: var(--text-tertiary);
 	padding: 4px;
-	border-radius: 8px;
+	border-radius: 6px;
 }
 
 .close-btn-sm:hover {
@@ -212,28 +215,57 @@
 }
 
 .editor-footer {
+	margin-top: auto;
+	padding-top: 32px;
+	border-top: 1px solid var(--border);
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: 12px;
 }
 
 .btn-danger-ghost {
 	background: transparent;
 	border: none;
-	color: var(--text-tertiary);
-	cursor: pointer;
-	padding: 10px;
+	color: #ff6b6b;
+	padding: 12px;
 	border-radius: 12px;
+	cursor: pointer;
 	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .btn-danger-ghost:hover {
-	background: rgba(255, 107, 107, 0.05);
-	color: #ff6b6b;
+	background: rgba(255, 107, 107, 0.1);
+	transform: scale(1.1);
 }
 
 .footer-actions {
 	display: flex;
 	gap: 12px;
+	flex: 1;
+	justify-content: flex-end;
+}
+
+.footer-actions .btn-premium,
+.footer-actions .btn-outline {
+	padding: 14px 28px;
+	border-radius: var(--radius-pill);
+	font-size: 0.95rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.btn-outline {
+	background: transparent;
+	border: 1px solid var(--border);
+	color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+	background: var(--bg-secondary);
+	border-color: var(--text-primary);
+	color: var(--text-primary);
 }

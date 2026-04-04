@@ -59,21 +59,32 @@
 	color: var(--text-primary);
 }
 
-.add-todo-btn-inner {
+.todo-input-premium button {
 	background: var(--primary);
 	color: white;
 	border: none;
-	width: 34px;
-	height: 34px;
-	border-radius: 11px;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--radius-pill);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	transition: transform 0.2s;
+	transition: transform 0.23s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.add-todo-btn-inner:active { transform: scale(0.9); }
+.todo-del {
+	background: transparent;
+	border: none;
+	color: var(--text-tertiary);
+	cursor: pointer;
+	padding: 6px;
+	border-radius: var(--radius-pill);
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 .todo-scroll-area {
 	flex: 1;

@@ -8,6 +8,14 @@
 	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.btn-start, .btn-reset {
+	padding: 14px 28px;
+	border-radius: var(--radius-pill);
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .pomodoro-timer.minimized {
 	width: auto;
 	padding: 12px 20px;

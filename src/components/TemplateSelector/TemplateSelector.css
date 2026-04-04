@@ -79,7 +79,7 @@
 	border: none;
 	color: var(--text-tertiary);
 	padding: 8px;
-	border-radius: 8px;
+	border-radius: var(--radius-pill);
 	cursor: pointer;
 	transition: all 0.2s;
 	display: flex;

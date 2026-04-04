@@ -69,8 +69,11 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 	return (
 		<div className="premium-editor">
 			<div className="editor-header">
-				<h3>{block ? "Edit Routine" : "New Routine"}</h3>
-				<button className="close-btn-sm" onClick={onCancel}><X size={18} /></button>
+				<div className="section-title-group">
+					<Plus size={18} />
+					<h3>{block ? "Edit Routine" : "New Routine"}</h3>
+				</div>
+				<button className="close-btn-sm" onClick={onCancel}><X size={20} /></button>
 			</div>
 
 			<form onSubmit={handleSave} className="editor-form">
@@ -166,9 +169,9 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 						</button>
 					)}
 					<div className="footer-actions">
-						<button type="button" className="btn-ghost" onClick={onCancel}>Cancel</button>
+						<button type="button" className="btn-outline" onClick={onCancel}>Cancel</button>
 						<button type="submit" className="btn-premium">
-							{block ? "Update" : "Create"}
+							{block ? "Update Block" : "Create Block"}
 						</button>
 					</div>
 				</div>
