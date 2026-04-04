@@ -309,7 +309,10 @@ export const Dashboard: React.FC = () => {
 								exit={{ opacity: 0, scale: 0.95 }}
 								className="glass-modal"
 							>
-								<h3>Save Template</h3>
+								<div className="section-title-group" style={{ marginBottom: 0 }}>
+									<Save size={18} />
+									<h3 style={{ margin: 0 }}>Save Template</h3>
+								</div>
 								<input
 									type="text"
 									placeholder="Template Name"
