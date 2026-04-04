@@ -2,7 +2,7 @@
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	background: #FFD200; /* Vibrant yellow from the reference image */
+	background: var(--bg-primary); /* Default fallback */
 	overflow: hidden;
 	position: relative;
 }
@@ -18,7 +18,7 @@
 }
 
 .header-brand h1 {
-	font-size: 1.2rem;
+	font-size: var(--font-size-h3);
 	font-weight: 800;
 	letter-spacing: 2px;
 	text-transform: uppercase;
@@ -36,23 +36,23 @@
 }
 
 .time-text-main {
-	font-size: 2rem;
+	font-size: var(--font-size-h1);
 	font-weight: 700;
-	letter-spacing: -1px;
+	letter-spacing: -1.5px;
 	color: rgba(0, 0, 0, 0.8);
 	font-variant-numeric: tabular-nums;
 }
 
 .active-block-status {
-	font-weight: 600;
-	font-size: 0.9rem;
+	font-weight: 700;
+	font-size: var(--font-size-xs);
 	text-transform: uppercase;
-	letter-spacing: 1px;
-	padding: 6px 16px;
+	letter-spacing: 1.5px;
+	padding: 8px 20px;
 	background: var(--bg-glass);
 	border: 1px solid var(--border);
 	border-radius: var(--radius-pill);
-	backdrop-filter: blur(10px);
+	backdrop-filter: blur(var(--glass-blur));
 }
 
 /* Centered Stage */
@@ -91,9 +91,9 @@
 .nav-btn {
 	background: transparent;
 	border: none;
-	width: 44px;
-	height: 44px;
-	border-radius: 14px;
+	width: 48px;
+	height: 48px;
+	border-radius: var(--radius-pill);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -132,7 +132,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	border-radius: var(--radius-pill);
+	border-radius: var(--radius-xl);
 	box-shadow: 0 20px 80px rgba(0,0,0,0.15);
 }
 
@@ -142,15 +142,6 @@
 .drawer-header {
 	display: flex;
 	justify-content: flex-end;
-}
-
-.close-drawer-btn {
-	background: transparent;
-	border: none;
-	cursor: pointer;
-	color: var(--text-tertiary);
-	padding: 6px;
-	border-radius: 12px;
 }
 
 .close-drawer-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-primary); }
@@ -163,13 +154,6 @@
 
 .drawer-footer .btn-premium {
 	width: 100%;
-	padding: 14px 28px;
-	border-radius: var(--radius-pill);
-	font-weight: 700;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
 }
 
 /* Editor Overlay */
@@ -193,7 +177,7 @@
 	max-width: 440px;
 	background: var(--bg-glass);
 	border: 1px solid var(--border);
-	border-radius: var(--radius-pill);
+	border-radius: var(--radius-xl);
 	padding: 32px;
 	box-shadow: 0 40px 100px rgba(0,0,0,0.2);
 }
@@ -203,7 +187,7 @@
 	padding: 32px;
 	background: var(--bg-glass);
 	border: 1px solid var(--border);
-	border-radius: var(--radius-pill);
+	border-radius: var(--radius-xl);
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
@@ -224,7 +208,7 @@
 	border: 1px solid var(--border);
 	padding: 14px 24px;
 	border-radius: var(--radius-pill);
-	font-size: 0.95rem;
+	font-size: var(--font-size-sm);
 	font-weight: 700;
 	width: 100%;
 	outline: none;

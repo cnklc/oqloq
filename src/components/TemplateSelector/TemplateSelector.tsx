@@ -25,7 +25,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 	return (
 		<div className="template-selector-premium">
 			<div className="template-section">
-				<div className="template-header">
+				<div className="section-title-group">
 					<Library size={16} />
 					<h3>Presets</h3>
 				</div>
@@ -57,7 +57,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 			</div>
 
 			<div className="template-section">
-				<div className="template-header">
+				<div className="section-title-group">
 					<Library size={16} />
 					<h3>My Patterns</h3>
 				</div>

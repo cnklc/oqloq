@@ -10,7 +10,7 @@ import { SettingsSidebar } from "../components/SettingsSidebar/SettingsSidebar";
 import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
 import { isTimeInBlock } from "../services/clockService";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, Save, Library, ListTodo, ChevronLeft, ChevronRight } from "lucide-react";
+import { Settings, Save, Library, ListTodo, X } from "lucide-react";
 import { useAppearanceStore } from "../hooks/useAppearanceStore";
 import "./Dashboard.css";
 
@@ -227,8 +227,8 @@ export const Dashboard: React.FC = () => {
 							className="glass-panel side-drawer left"
 						>
 							<div className="drawer-header">
-								<button className="close-drawer-btn" onClick={() => setIsLeftDrawerOpen(false)}>
-									<ChevronLeft size={24} />
+								<button className="icon-btn-sm" onClick={() => setIsLeftDrawerOpen(false)}>
+									<X size={20} />
 								</button>
 							</div>
 							<TemplateSelector
@@ -262,8 +262,8 @@ export const Dashboard: React.FC = () => {
 							className="glass-panel side-drawer right"
 						>
 							<div className="drawer-header">
-								<button className="close-drawer-btn" onClick={() => setIsRightDrawerOpen(false)}>
-									<ChevronRight size={24} />
+								<button className="icon-btn-sm" onClick={() => setIsRightDrawerOpen(false)}>
+									<X size={20} />
 								</button>
 							</div>
 

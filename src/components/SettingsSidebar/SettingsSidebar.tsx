@@ -12,7 +12,7 @@ import {
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useAppearanceStore } from "../../hooks/useAppearanceStore";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
-import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer, Pipette } from "lucide-react";
+import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer, Pipette, Database } from "lucide-react";
 import "./SettingsSidebar.css";
 
 const BG_PRESETS = [
@@ -233,7 +233,10 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 					</div>
 
 					<div className="settings-section">
-						<h3>Data Management</h3>
+						<div className="section-title-group">
+							<Database size={16} />
+							<h3>Data Management</h3>
+						</div>
 						<div className="data-actions">
 							<button className="btn-outline" onClick={handleExport}>
 								<Download size={16} /> Export JSON

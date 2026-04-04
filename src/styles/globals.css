@@ -26,15 +26,24 @@
 
 	/* Typography */
 	--font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+	--font-size-h1: 2.5rem;
+	--font-size-h2: 1.8rem;
+	--font-size-h3: 1.25rem;
+	--font-size-base: 1rem;
+	--font-size-sm: 0.875rem;
+	--font-size-xs: 0.75rem;
 	
-	/* Spacing */
+	/* Spacing & Radius */
+	--radius-pill: 9999px;
+	--radius-xl: 48px;
 	--radius-lg: 32px;
-	--radius-md: 14px;
+	--radius-md: 16px;
 	--radius-sm: 8px;
-	--radius-pill: 40px;
+	--radius-xs: 4px;
 	
 	--shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.05);
 	--shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+	--glass-blur: 12px;
 }
 
 .theme-dark {
@@ -44,9 +53,11 @@
 	
 	--bg-primary: hsl(240, 10%, 10%);
 	--bg-secondary: hsl(240, 10%, 12%);
-	--bg-glass: rgba(20, 20, 25, 0.7);
+	--bg-glass: rgba(15, 15, 20, 0.8);
 	
-	--border: rgba(255, 255, 255, 0.1);
+	--border: rgba(255, 255, 255, 0.08);
+	--primary-light: hsla(var(--h), var(--s), var(--l), 0.15);
+	--glow: hsla(var(--h), var(--s), var(--l), 0.3);
 }
 
 /* Base Styles */
@@ -67,8 +78,8 @@ body {
 /* Glassmorphism */
 .glass-panel {
 	background: var(--bg-glass);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
 	border: 1px solid var(--border);
 	box-shadow: var(--shadow-glass);
 	border-radius: var(--radius-lg);
@@ -79,7 +90,25 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 40px;
+	padding: 14px 28px;
+	background: var(--primary);
+	color: white;
+	border: none;
+	border-radius: var(--radius-pill);
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 4px 15px var(--glow);
+}
+
+.btn-premium:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px var(--glow);
+	filter: brightness(1.05);
+}
+
+.btn-premium:active {
+	transform: translateY(0);
 }
 
 .current-time-glow {
@@ -94,10 +123,48 @@ body {
 }
 
 /* Typography Overrides */
-h1 { font-size: 2.5rem; letter-spacing: -1px; }
-h3 { font-weight: 500; font-size: 1.25rem; }
+h1 { font-size: var(--font-size-h1); letter-spacing: -1px; font-weight: 700; }
+h2 { font-size: var(--font-size-h2); letter-spacing: -0.5px; font-weight: 600; }
+h3 { font-size: var(--font-size-h3); font-weight: 500; }
+
+/* Utilities */
+.icon-btn-sm {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--text-tertiary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border-radius: var(--radius-sm);
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-btn-sm:hover {
+	background: rgba(0,0,0,0.05);
+	color: var(--text-primary);
+	transform: scale(1.1);
+}
+
+/* Sidebar Section Styles */
+.section-title-group {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 20px;
+	color: var(--text-tertiary);
+}
+
+.section-title-group h3 {
+	font-size: var(--font-size-xs);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	margin: 0;
+}
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+ ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: var(--border); 	border-radius: var(--radius-pill);
  }

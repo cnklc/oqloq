@@ -28,9 +28,25 @@
 
 .todos-header-focused h3 {
 	margin: 0;
-	font-size: 1rem;
+	font-size: var(--font-size-base);
 	font-weight: 700;
 	color: var(--text-primary);
+}
+
+.todo-input-minimal {
+	display: flex;
+	gap: 8px;
+	background: var(--bg-secondary);
+	border: 1px solid var(--border);
+	padding: 4px 4px 4px 12px;
+	border-radius: var(--radius-md);
+	transition: all 0.2s;
+}
+
+.todo-input-minimal:focus-within {
+	border-color: var(--primary);
+	background: var(--bg-primary);
+	box-shadow: 0 0 0 4px var(--primary-light);
 }
 
 .todo-input-premium {
@@ -39,13 +55,13 @@
 	background: var(--bg-secondary);
 	border: 1px solid var(--border);
 	padding: 4px 4px 4px 14px;
-	border-radius: 14px;
+	border-radius: var(--radius-md);
 	transition: all 0.2s;
 }
 
 .todo-input-premium:focus-within {
 	border-color: var(--primary);
-	background: white;
+	background: var(--bg-primary);
 	box-shadow: 0 0 0 4px var(--primary-light);
 }
 
@@ -55,7 +71,7 @@
 	border: none;
 	outline: none;
 	font-family: inherit;
-	font-size: 0.9rem;
+	font-size: var(--font-size-sm);
 	color: var(--text-primary);
 }
 
@@ -104,7 +120,7 @@
 	gap: 12px;
 	padding: 12px;
 	background: rgba(0,0,0,0.02);
-	border-radius: 12px;
+	border-radius: var(--radius-md);
 	border: 1px solid transparent;
 	transition: all 0.2s;
 }
@@ -136,7 +152,7 @@
 
 .todo-label {
 	flex: 1;
-	font-size: 0.9rem;
+	font-size: var(--font-size-sm);
 	font-weight: 500;
 	color: var(--text-secondary);
 }
@@ -150,7 +166,7 @@
 	border: none;
 	cursor: pointer;
 	padding: 6px;
-	border-radius: 8px;
+	border-radius: var(--radius-sm);
 	color: var(--text-tertiary);
 	opacity: 0;
 	transition: all 0.2s;
@@ -171,7 +187,7 @@
 	justify-content: center;
 	padding: 40px 20px;
 	color: var(--text-tertiary);
-	font-size: 0.85rem;
+	font-size: var(--font-size-xs);
 	text-align: center;
 }
 

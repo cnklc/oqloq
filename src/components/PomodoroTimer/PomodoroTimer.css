@@ -5,6 +5,7 @@
 	width: 280px;
 	z-index: 1000;
 	padding: 24px;
+	border-radius: var(--radius-xl);
 	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -41,34 +42,17 @@
 }
 
 .mode-label {
-	font-weight: 600;
-	font-size: 0.95rem;
+	font-weight: 700;
+	font-size: var(--font-size-sm);
 	color: var(--text-primary);
 }
 
 .minimized-time {
-	font-size: 0.8rem;
+	font-size: var(--font-size-xs);
 	font-weight: 500;
 	color: var(--text-secondary);
 }
 
-.icon-btn-sm {
-	background: transparent;
-	border: none;
-	cursor: pointer;
-	color: var(--text-tertiary);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 6px;
-	border-radius: 8px;
-	transition: all 0.2s;
-}
-
-.icon-btn-sm:hover {
-	background: rgba(0,0,0,0.05);
-	color: var(--text-secondary);
-}
 
 .pomodoro-content {
 	margin-top: 24px;
@@ -110,11 +94,11 @@
 }
 
 .time-text {
-	font-size: 2.5rem;
+	font-size: var(--font-size-h1);
 	font-weight: 700;
 	color: var(--text-primary);
 	font-variant-numeric: tabular-nums;
-	letter-spacing: -1px;
+	letter-spacing: -1.5px;
 }
 
 .pomodoro-controls {
@@ -157,8 +141,8 @@
 }
 
 .pomodoro-stats-premium {
-	font-size: 0.75rem;
-	font-weight: 600;
+	font-size: var(--font-size-xs);
+	font-weight: 700;
 	color: var(--text-tertiary);
 	text-transform: uppercase;
 	letter-spacing: 1.5px;
