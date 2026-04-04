@@ -4,14 +4,15 @@
  */
 
 import React, { useState } from "react";
-import { getTheme, setTheme, type ThemeMode } from "../../services/themeService";
 import {
 	getPomodoroSettings,
 	savePomodoroSettings,
 	type PomodoroSettings,
 } from "../../services/pomodoroService";
 import { useRoutineStore } from "../../hooks/useRoutineStore";
-import { X, Download, Upload, Trash2, Code, ExternalLink } from "lucide-react";
+import { useAppearanceStore } from "../../hooks/useAppearanceStore";
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
+import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw } from "lucide-react";
 import "./SettingsSidebar.css";
 
 interface SettingsSidebarProps {
@@ -21,15 +22,17 @@ interface SettingsSidebarProps {
 
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClose }) => {
 	const { blocks, templates, setBlocks, setTemplates } = useRoutineStore();
-	const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => getTheme());
 	const [pomodoroSettings, setPomodoroSettings] = useState<PomodoroSettings>(() =>
 		getPomodoroSettings()
 	);
-
-	const handleThemeChange = (theme: ThemeMode) => {
-		setTheme(theme);
-		setCurrentTheme(theme);
-	};
+	
+	const { 
+		backgroundColor, 
+		clockFaceColor, 
+		setBackgroundColor, 
+		setClockFaceColor, 
+		resetAppearance 
+	} = useAppearanceStore();
 
 	const handlePomodoroSettingChange = (key: keyof PomodoroSettings, value: number) => {
 		const newSettings = { ...pomodoroSettings, [key]: value };
@@ -84,21 +87,47 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 
 				<div className="settings-content">
 					<div className="settings-section">
-						<h3>Appearance</h3>
+						<div className="section-title-group">
+							<Palette size={16} />
+							<h3>Appearance</h3>
+						</div>
+						
 						<div className="setting-item">
-							<label>Theme</label>
-							<div className="theme-options">
-								{(["light", "dark", "auto"] as ThemeMode[]).map(t => (
-									<button 
-										key={t}
-										className={`theme-btn ${currentTheme === t ? "active" : ""}`}
-										onClick={() => handleThemeChange(t)}
-									>
-										{t}
-									</button>
-								))}
+							<div className="setting-item-header">
+								<label>Theme</label>
+								<ThemeToggle />
 							</div>
 						</div>
+
+						<div className="setting-item">
+							<label>Background Color</label>
+							<div className="color-picker-group">
+								<input 
+									type="color" 
+									value={backgroundColor} 
+									onChange={(e) => setBackgroundColor(e.target.value)}
+									className="premium-color-input"
+								/>
+								<span className="color-hex-label">{backgroundColor}</span>
+							</div>
+						</div>
+
+						<div className="setting-item">
+							<label>Clock Face Color</label>
+							<div className="color-picker-group">
+								<input 
+									type="color" 
+									value={clockFaceColor} 
+									onChange={(e) => setClockFaceColor(e.target.value)}
+									className="premium-color-input"
+								/>
+								<span className="color-hex-label">{clockFaceColor}</span>
+							</div>
+						</div>
+						
+						<button className="btn-ghost-sm" onClick={resetAppearance}>
+							<RotateCcw size={14} /> Reset Appearance
+						</button>
 					</div>
 
 					<div className="settings-section">

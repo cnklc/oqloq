@@ -16,8 +16,8 @@ const CLOCK_SIZE = 640;
 const CENTER_X = CLOCK_SIZE / 2;
 const CENTER_Y = CLOCK_SIZE / 2;
 const MAIN_CIRCLE_RADIUS = 240; // The "Dome"
-const BLOCK_RADIUS = 285; // Outer ring position
-const BLOCK_THICKNESS = 8; // Reduced to ~30% of original (from 25 to 8)
+const BLOCK_RADIUS = 265; // Reduced gap (was 285)
+const BLOCK_THICKNESS = 8; // Reduced thickness
 
 export const Clock: React.FC<ClockProps> = ({
 	blocks,
@@ -152,9 +152,10 @@ export const Clock: React.FC<ClockProps> = ({
 					cx={CENTER_X}
 					cy={CENTER_Y}
 					r={MAIN_CIRCLE_RADIUS}
-					fill="url(#domeGradient)"
+					fill="var(--clock-dome-bg, #ffffff)"
 					filter="url(#domeShadow)"
-					className="clock-face"
+					className="clock-face-dome"
+					onClick={() => onEmptyClick(0)}
 				/>
 
 				{/* Subdued Labels */}

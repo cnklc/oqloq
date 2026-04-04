@@ -11,7 +11,7 @@ import { PomodoroTimer } from "../components/PomodoroTimer/PomodoroTimer";
 import { isTimeInBlock } from "../services/clockService";
 import { motion, AnimatePresence } from "framer-motion";
 import { Settings, Save, Library, ListTodo, ChevronLeft, ChevronRight } from "lucide-react";
-import { ThemeToggle } from "../components/ThemeToggle/ThemeToggle";
+import { useAppearanceStore } from "../hooks/useAppearanceStore";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
@@ -28,6 +28,7 @@ export const Dashboard: React.FC = () => {
 	} = useRoutineStore();
 	
 	const { currentMinute, currentTimeFormatted } = useCurrentTime();
+	const { backgroundColor, clockFaceColor } = useAppearanceStore();
 
 	const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 	const [isEditing, setIsEditing] = useState(false);
@@ -126,7 +127,13 @@ export const Dashboard: React.FC = () => {
 		: Math.round(currentMinute / 30) * 30;
 
 	return (
-		<div className="dashboard">
+		<div 
+			className="dashboard"
+			style={{ 
+				backgroundColor: backgroundColor,
+				"--clock-dome-bg": clockFaceColor,
+			} as React.CSSProperties}
+		>
 			<header className="minimal-header">
 				<div className="header-brand">
 					<h1>Oqloq</h1>
@@ -185,8 +192,6 @@ export const Dashboard: React.FC = () => {
 				</button>
 
 				<div className="nav-divider" />
-				
-				<ThemeToggle />
 				
 				<button
 					className="nav-btn"

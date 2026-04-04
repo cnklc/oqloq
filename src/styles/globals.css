@@ -28,9 +28,10 @@
 	--font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
 	
 	/* Spacing */
-	--radius-lg: 24px;
-	--radius-md: 16px;
+	--radius-lg: 32px;
+	--radius-md: 14px;
 	--radius-sm: 8px;
+	--radius-pill: 40px;
 	
 	--shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.05);
 	--shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
@@ -75,43 +76,6 @@ body {
 
 /* Premium Buttons */
 .btn-premium {
-	background: var(--primary);
-	color: white;
-	border: none;
-	padding: 12px 24px;
-	border-radius: var(--radius-md);
-	font-weight: 600;
-	cursor: pointer;
-	transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	box-shadow: 0 4px 15px var(--glow);
-}
-
-.btn-premium:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 25px var(--glow);
-	background: var(--primary-dark);
-}
-
-.btn-outline {
-	background: transparent;
-	border: 2px solid var(--primary);
-	color: var(--primary);
-	padding: 10px 22px;
-	border-radius: var(--radius-md);
-	font-weight: 600;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.btn-outline:hover {
-	background: var(--primary-light);
-}
-
-/* Layout Items */
-.clock-container-outer {
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -136,4 +100,5 @@ h3 { font-weight: 500; font-size: 1.25rem; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border); 	border-radius: var(--radius-pill);
+ }
