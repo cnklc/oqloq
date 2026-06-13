@@ -112,13 +112,6 @@ export const getBlockArcPath = (
 };
 
 /**
- * Snap minutes to a specific interval (e.g., 5, 10, 15 minutes)
- */
-export const snapToInterval = (minutes: number, interval: number = 15): number => {
-	return Math.round(minutes / interval) * interval;
-};
-
-/**
  * Clamp minutes between 0 and 1439
  */
 export const clampMinutes = (minutes: number): number => {
@@ -126,15 +119,13 @@ export const clampMinutes = (minutes: number): number => {
 };
 
 /**
- * Get current day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
- */
-export const getCurrentDayOfWeek = (): number => {
-	return new Date().getDay();
-};
-
-/**
- * Check if a minute value is within a block's time range
+ * Check if a minute value is within a block's time range.
+ * Handles blocks that cross midnight (e.g. 22:00 -> 06:00, where start > end).
  */
 export const isTimeInBlock = (minute: number, blockStart: number, blockEnd: number): boolean => {
-	return minute >= blockStart && minute < blockEnd;
+	if (blockStart <= blockEnd) {
+		return minute >= blockStart && minute < blockEnd;
+	}
+	// Crosses midnight: active from start until 24:00, then 00:00 until end.
+	return minute >= blockStart || minute < blockEnd;
 };

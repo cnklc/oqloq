@@ -47,7 +47,7 @@ export const ActiveBlockTodos: React.FC<ActiveBlockTodosProps> = ({
 					placeholder="What needs to be done?"
 					value={newTodoText}
 					onChange={(e) => setNewTodoText(e.target.value)}
-					onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
+					onKeyDown={(e) => e.key === "Enter" && handleAddTodo()}
 				/>
 				<button onClick={handleAddTodo} className="add-todo-btn-inner">
 					<Plus size={18} />

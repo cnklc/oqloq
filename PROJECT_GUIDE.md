@@ -136,20 +136,22 @@ Default colors available in the editor:
 
 ## 💾 LocalStorage
 
-The app persists data to browser LocalStorage:
+State is managed with [Zustand](https://github.com/pmndrs/zustand) and persisted to
+browser LocalStorage via the `persist` middleware:
 
-- `oqlock_blocks` - Current routine blocks
-- `oqlock_templates` - Custom user templates
-- `oqlock_current_template` - Active template ID
+- `oqlock-storage` - Routine blocks, templates, and the active template ID (`useRoutineStore`)
+- `oqlock-appearance` - Background color, clock face color, and clock scale (`useAppearanceStore`)
+- `oqlock-theme` - Light/dark theme preference (`ThemeToggle`)
+- `pomodoroSettings` - Pomodoro durations (`pomodoroService`)
 
 ### Reset Storage (Browser Console)
 
 ```javascript
-localStorage.removeItem("oqlock_blocks");
-localStorage.removeItem("oqlock_templates");
-localStorage.removeItem("oqlock_current_template");
+localStorage.clear();
 location.reload();
 ```
+
+You can also use **Settings → Data Management → Reset All Data** in the app.
 
 ## 📱 Usage
 
@@ -188,8 +190,11 @@ location.reload();
 - **Frontend**: React 19 + TypeScript
 - **Build Tool**: Vite 7
 - **Styling**: CSS3 (no frameworks)
-- **State**: React hooks + LocalStorage
+- **State**: Zustand (with `persist` middleware to LocalStorage)
 - **Graphics**: SVG
+- **Animation**: Framer Motion
+- **Icons**: lucide-react
+- **Testing**: Vitest
 - **Linting**: ESLint + TypeScript
 
 ## 📝 Services
@@ -198,42 +203,37 @@ location.reload();
 
 Time calculations and angle conversions:
 
-- `minutesToDegrees()` - Convert minutes to circle degrees
-- `getCurrentTimeInMinutes()` - Get current time
-- `getBlockArcPath()` - Generate SVG arc paths for blocks
+- `minutesToDegrees()` / `degreesToMinutes()` - Minute ↔ circle-degree conversion
+- `getCurrentTimeInMinutes()` / `getCurrentTimeFormatted()` - Current time
+- `getBlockArcPath()` - Generate SVG arc paths for blocks (handles midnight crossover)
+- `isTimeInBlock()` - Active-block detection (handles midnight crossover)
+- `clampMinutes()`, `minutesToTimeString()`, `timeStringToMinutes()` - Helpers
 
-### storageService.ts
+### pomodoroService.ts
 
-LocalStorage operations:
+Pomodoro settings persistence and a change-event subscription used by the timer and
+settings panel.
 
-- `getBlocks()` / `saveBlocks()` - Block persistence
-- `getTemplates()` / `saveCustomTemplate()` - Template management
-- `getCurrentTemplateId()` / `setCurrentTemplateId()` - Active template
+## 🎯 Hooks (Zustand stores)
 
-### templateService.ts
+### useRoutineStore()
 
-Template management:
+Routine blocks, templates, and the active template — persisted to `oqlock-storage`:
 
-- `getCurrentTemplate()` - Get active template
-- `switchTemplate()` - Change active template
-- `createTemplateFromBlocks()` - Save custom template
+```typescript
+const { blocks, addBlock, updateBlock, deleteBlock, templates, applyTemplate } = useRoutineStore();
+```
 
-## 🎯 Hooks
+### useAppearanceStore()
+
+Background/clock-face colors and clock scale — persisted to `oqlock-appearance`.
 
 ### useCurrentTime()
 
-Provides real-time clock updates every minute:
+Provides real-time clock updates aligned to the minute boundary:
 
 ```typescript
 const { currentMinute, currentTimeFormatted } = useCurrentTime();
-```
-
-### useRoutineBlocks()
-
-Block state management with persistence:
-
-```typescript
-const { blocks, addBlock, updateBlock, deleteBlock, setBlocks } = useRoutineBlocks();
 ```
 
 ## 🎛️ CSS Variables

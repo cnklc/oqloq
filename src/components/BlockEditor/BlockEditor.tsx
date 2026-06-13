@@ -56,6 +56,12 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 			return;
 		}
 
+		// End may be earlier than start (block crosses midnight), but it must not equal start.
+		if (startMinute === endMinute) {
+			alert("Start and end time cannot be the same");
+			return;
+		}
+
 		onSave({
 			id: block?.id || `block_${Date.now()}`,
 			title: title.trim(),
@@ -130,7 +136,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 							placeholder="Add a sub-task..."
 							value={newTodoText}
 							onChange={(e) => setNewTodoText(e.target.value)}
-							onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTodo())}
+							onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTodo())}
 						/>
 						<button type="button" onClick={handleAddTodo}><Plus size={16} /></button>
 					</div>

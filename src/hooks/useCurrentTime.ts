@@ -12,34 +12,28 @@ interface UseCurrentTimeReturn {
 }
 
 export const useCurrentTime = (): UseCurrentTimeReturn => {
-	const [currentMinute, setCurrentMinute] = useState(getCurrentTimeInMinutes());
-	const [currentTimeFormatted, setCurrentTimeFormatted] = useState(getCurrentTimeFormatted());
+	const [currentMinute, setCurrentMinute] = useState(getCurrentTimeInMinutes);
+	const [currentTimeFormatted, setCurrentTimeFormatted] = useState(getCurrentTimeFormatted);
 
 	useEffect(() => {
-		// Update immediately
-		setCurrentMinute(getCurrentTimeInMinutes());
-		setCurrentTimeFormatted(getCurrentTimeFormatted());
+		let intervalId: ReturnType<typeof setInterval> | undefined;
 
-		// Calculate delay until next minute
-		const now = new Date();
-		const secondsUntilNextMinute = 60 - now.getSeconds();
-		const msUntilNextMinute = secondsUntilNextMinute * 1000;
-
-		// Set initial timeout to next minute
-		const initialTimeout = setTimeout(() => {
+		const tick = () => {
 			setCurrentMinute(getCurrentTimeInMinutes());
 			setCurrentTimeFormatted(getCurrentTimeFormatted());
+		};
 
-			// Then set interval for every minute
-			const interval = setInterval(() => {
-				setCurrentMinute(getCurrentTimeInMinutes());
-				setCurrentTimeFormatted(getCurrentTimeFormatted());
-			}, 60000); // Update every 60 seconds
-
-			return () => clearInterval(interval);
+		// Align the first update to the next minute boundary, then tick every minute.
+		const msUntilNextMinute = (60 - new Date().getSeconds()) * 1000;
+		const timeoutId = setTimeout(() => {
+			tick();
+			intervalId = setInterval(tick, 60000);
 		}, msUntilNextMinute);
 
-		return () => clearTimeout(initialTimeout);
+		return () => {
+			clearTimeout(timeoutId);
+			if (intervalId) clearInterval(intervalId);
+		};
 	}, []);
 
 	return { currentMinute, currentTimeFormatted };

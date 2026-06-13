@@ -86,7 +86,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 				if (data.blocks) setBlocks(data.blocks);
 				if (data.templates) setTemplates(data.templates);
 				alert("Data imported successfully!");
-			} catch (err) {
+			} catch {
 				alert("Failed to import: Invalid JSON file");
 			}
 		};
