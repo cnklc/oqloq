@@ -1,8 +1,3 @@
-/**
- * BlockEditor Component
- * Form for creating and editing routine blocks
- */
-
 import React, { useState } from "react";
 import type { RoutineBlock, Todo } from "../../types/models";
 import { COLOR_PALETTE } from "../../types/models";
@@ -11,6 +6,7 @@ import {
 	timeStringToMinutes,
 	clampMinutes,
 } from "../../services/clockService";
+import { Trash2, Plus, X, Check } from "lucide-react";
 import "./BlockEditor.css";
 
 interface BlockEditorProps {
@@ -41,87 +37,69 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 
 	const handleAddTodo = () => {
 		if (!newTodoText.trim()) return;
-
 		const newTodo: Todo = {
 			id: `todo_${Date.now()}`,
 			text: newTodoText.trim(),
 			completed: false,
 		};
-
 		setTodos([...todos, newTodo]);
 		setNewTodoText("");
 	};
 
-	const handleToggleTodo = (todoId: string) => {
-		setTodos(
-			todos.map((todo) => (todo.id === todoId ? { ...todo, completed: !todo.completed } : todo))
-		);
-	};
-
-	const handleDeleteTodo = (todoId: string) => {
-		setTodos(todos.filter((todo) => todo.id !== todoId));
-	};
-
 	const handleSave = (e: React.FormEvent) => {
 		e.preventDefault();
-
 		const startMinute = clampMinutes(timeStringToMinutes(startTime));
 		const endMinute = clampMinutes(timeStringToMinutes(endTime));
-
-		if (endMinute <= startMinute) {
-			alert("End time must be after start time");
-			return;
-		}
 
 		if (!title.trim()) {
 			alert("Please enter a title");
 			return;
 		}
 
-		const savedBlock: RoutineBlock = {
+		onSave({
 			id: block?.id || `block_${Date.now()}`,
 			title: title.trim(),
 			color,
 			startMinute,
 			endMinute,
 			todos,
-		};
-
-		onSave(savedBlock);
+		});
 	};
 
 	return (
-		<div className="block-editor">
-			<h3>{block ? "Edit Block" : "New Block"}</h3>
+		<div className="premium-editor">
+			<div className="editor-header">
+				<div className="section-title-group">
+					<Plus size={18} />
+					<h3>{block ? "Edit Routine" : "New Routine"}</h3>
+				</div>
+				<button className="close-btn-sm" onClick={onCancel}><X size={20} /></button>
+			</div>
 
-			<form onSubmit={handleSave}>
-				<div className="form-group">
-					<label htmlFor="title">Title</label>
+			<form onSubmit={handleSave} className="editor-form">
+				<div className="input-group">
 					<input
-						id="title"
 						type="text"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						placeholder="e.g., Deep Work, Sleep, Meetings"
+						placeholder="What are you doing? (e.g. Deep Work)"
+						className="title-input-large"
 						autoFocus
 					/>
 				</div>
 
-				<div className="form-row">
-					<div className="form-group">
-						<label htmlFor="start-time">Start Time</label>
+				<div className="time-row">
+					<div className="time-field">
+						<label>Start</label>
 						<input
-							id="start-time"
 							type="time"
 							value={startTime}
 							onChange={(e) => setStartTime(e.target.value)}
 						/>
 					</div>
-
-					<div className="form-group">
-						<label htmlFor="end-time">End Time</label>
+					<div className="time-field">
+						<label>End</label>
 						<input
-							id="end-time"
 							type="time"
 							value={endTime}
 							onChange={(e) => setEndTime(e.target.value)}
@@ -129,84 +107,73 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 					</div>
 				</div>
 
-				<div className="form-group">
-					<label>Color</label>
-					<div className="color-picker">
+				<div className="color-section">
+					<label>Color Theme</label>
+					<div className="premium-color-picker">
 						{COLOR_PALETTE.map((c) => (
 							<button
 								key={c}
 								type="button"
-								className={`color-swatch ${color === c ? "selected" : ""}`}
+								className={`swatch ${color === c ? "active" : ""}`}
 								style={{ backgroundColor: c }}
 								onClick={() => setColor(c)}
-								title={c}
 							/>
 						))}
 					</div>
 				</div>
 
-				{/* Todo List Section */}
-				<div className="form-group">
-					<label>📝 Todo List</label>
-					<div className="todo-input-group">
+				<div className="todo-section">
+					<label>Tasks</label>
+					<div className="todo-input-minimal">
 						<input
 							type="text"
-							placeholder="Yeni todo ekle..."
+							placeholder="Add a sub-task..."
 							value={newTodoText}
 							onChange={(e) => setNewTodoText(e.target.value)}
-							onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
+							onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTodo())}
 						/>
-						<button type="button" className="btn-add-todo" onClick={handleAddTodo}>
-							+
-						</button>
+						<button type="button" onClick={handleAddTodo}><Plus size={16} /></button>
 					</div>
 
-					{todos.length > 0 && (
-						<div className="todo-list">
-							{todos.map((todo) => (
-								<div key={todo.id} className="todo-item">
-									<input
-										type="checkbox"
-										checked={todo.completed}
-										onChange={() => handleToggleTodo(todo.id)}
-										className="todo-checkbox"
-									/>
-									<span className={`todo-text ${todo.completed ? "completed" : ""}`}>
-										{todo.text}
-									</span>
-									<button
-										type="button"
-										className="btn-delete-todo"
-										onClick={() => handleDeleteTodo(todo.id)}
-									>
-										×
-									</button>
-								</div>
-							))}
-						</div>
-					)}
+					<div className="editor-todo-list">
+						{todos.map((todo) => (
+							<div key={todo.id} className="editor-todo-item">
+								<button 
+									type="button"
+									className={`todo-check ${todo.completed ? 'done' : ''}`}
+									onClick={() => setTodos(todos.map(t => t.id === todo.id ? {...t, completed: !t.completed} : t))}
+								>
+									{todo.completed && <Check size={12} />}
+								</button>
+								<span className={todo.completed ? 'strikethrough' : ''}>{todo.text}</span>
+								<button 
+									type="button" 
+									className="todo-del"
+									onClick={() => setTodos(todos.filter(t => t.id !== todo.id))}
+								>
+									<Trash2 size={14} />
+								</button>
+							</div>
+						))}
+					</div>
 				</div>
 
-				<div className="form-actions">
-					<button type="submit" className="btn btn-primary">
-						{block ? "Update" : "Create"}
-					</button>
-					<button type="button" className="btn btn-secondary" onClick={onCancel}>
-						Cancel
-					</button>
+				<div className="editor-footer">
 					{block && onDelete && (
 						<button
 							type="button"
-							className="btn btn-danger"
-							onClick={() => {
-								if (confirm("Delete this block?")) {
-									onDelete(block.id);
-								}
-							}}
+							className="btn-danger-ghost"
+							onClick={() => confirm("Delete this block?") && onDelete(block.id)}
 						>
-							Delete
+							<Trash2 size={18} />
 						</button>
 					)}
+					<div className="footer-actions">
+						<button type="button" className="btn-outline" onClick={onCancel}>Cancel</button>
+						<button type="submit" className="btn-premium">
+							{block ? "Update Block" : "Create Block"}
+						</button>
+					</div>
 				</div>
 			</form>
 		</div>

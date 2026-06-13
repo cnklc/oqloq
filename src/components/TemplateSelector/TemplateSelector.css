@@ -1,208 +1,92 @@
-/* TemplateSelector Component Styles */
-
-.template-selector {
-	background: #ffffff;
-	border: 1px solid #f0f0f0;
-	border-radius: 12px;
-	padding: 20px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-	position: relative;
+.template-selector-premium {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 }
 
-:root.theme-dark .template-selector {
-	background: var(--bg-primary);
-	border: 1px solid var(--border-light);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+.template-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
-.template-selector h3 {
-	margin: 0 0 16px 0;
-	font-size: 16px;
-	font-weight: 600;
-	color: #333;
+.template-card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px;
+	background: var(--bg-secondary);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-:root.theme-dark .template-selector h3 {
+.template-card:hover {
+	border-color: var(--primary);
+	transform: translateX(4px);
+	background: var(--bg-tertiary);
+}
+
+.template-card.active {
+	background: var(--primary-light);
+	border-color: var(--primary);
+}
+
+.template-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.template-name {
+	font-weight: 700;
+	font-size: var(--font-size-sm);
 	color: var(--text-primary);
 }
 
-.template-buttons {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+.template-meta {
+	font-size: var(--font-size-xs);
+	color: var(--text-tertiary);
 }
 
-.template-item {
-	display: flex;
-	gap: 8px;
-	align-items: stretch;
-}
-
-.template-btn {
-	width: 100%;
-	padding: 12px 16px;
-	background-color: #f5f5f5;
-	border: 2px solid transparent;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #555;
-	cursor: pointer;
-	transition: all 0.2s;
-	text-align: left;
-	flex: 1;
-}
-
-:root.theme-dark .template-btn {
-	background-color: var(--bg-secondary);
-	color: var(--text-secondary);
-}
-
-.template-btn:hover {
-	background-color: #eee;
-	border-color: #ddd;
-}
-
-:root.theme-dark .template-btn:hover {
-	background-color: var(--bg-tertiary);
-	border-color: var(--border-medium);
-}
-
-.template-btn.active {
-	background-color: #ffb4d6;
-	color: #333;
-	border-color: #ff9bc5;
-	box-shadow: 0 2px 6px rgba(255, 180, 214, 0.3);
-	font-weight: 600;
-}
-
-.delete-template-btn {
-	padding: 12px 14px;
-	background-color: #ffffff;
-	border: 2px solid #e0e0e0;
-	border-radius: 8px;
-	font-size: 16px;
-	font-weight: 600;
-	color: #ff6b6b;
-	cursor: pointer;
-	transition: all 0.2s;
+.template-actions {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	min-width: 44px;
-	min-height: 44px;
-	flex-shrink: 0;
 }
 
-:root.theme-dark .delete-template-btn {
-	background-color: var(--bg-secondary);
-	border: 2px solid var(--border-medium);
+.active-icon {
+	color: var(--primary);
 }
 
-.delete-template-btn:hover {
-	background-color: #ff6b6b;
-	color: #ffffff;
-	border-color: #ff6b6b;
-	box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
-}
-
-.delete-template-btn:active {
-	transform: scale(0.95);
-}
-
-/* Confirmation dialog */
-.confirm-dialog {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0, 0, 0, 0.4);
-	border-radius: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 10;
-	animation: fadeIn 0.2s;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-.confirm-content {
-	background: white;
-	border-radius: 12px;
-	padding: 20px;
-	text-align: center;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-	animation: slideUp 0.2s;
-}
-
-@keyframes slideUp {
-	from {
-		transform: translateY(10px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-.confirm-content p {
-	margin: 0 0 16px 0;
-	font-size: 14px;
-	color: #555;
-}
-
-.confirm-actions {
-	display: flex;
-	gap: 8px;
-}
-
-.btn-confirm,
-.btn-cancel {
-	flex: 1;
-	padding: 10px 16px;
+.delete-btn-sm {
+	background: transparent;
 	border: none;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 500;
+	color: var(--text-tertiary);
+	padding: 8px;
+	border-radius: var(--radius-pill);
 	cursor: pointer;
 	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.btn-confirm {
-	background-color: #ffb4d6;
-	color: #333;
+.delete-btn-sm:hover {
+	background: rgba(255, 107, 107, 0.1);
+	color: #ff6b6b;
 }
 
-.btn-confirm:hover {
-	background-color: #ffadc8;
+/* Dark Mode Tweaks */
+.theme-dark .template-card {
+	background: rgba(255, 255, 255, 0.03);
 }
 
-.btn-cancel {
-	background-color: #f0f0f0;
-	color: #555;
+.theme-dark .template-card:hover {
+	background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-cancel:hover {
-	background-color: #e8e8e8;
-}
-
-@media (max-width: 480px) {
-	.template-selector {
-		padding: 16px;
-	}
-
-	.template-btn {
-		padding: 10px 14px;
-		font-size: 13px;
-	}
+.theme-dark .template-card.active {
+	background: hsla(var(--h), var(--s), var(--l), 0.1);
 }

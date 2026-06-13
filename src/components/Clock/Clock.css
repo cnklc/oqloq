@@ -1,62 +1,78 @@
-/* Clock Component Styles */
+/* Clock Component Styles - Redesigned to match the reference image */
 
 .clock-container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	max-width: 700px;
+	max-width: 800px;
 	margin: 0 auto;
 }
 
-.clock-svg {
-	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-	max-width: 100%;
-	height: auto;
+.clock-wrapper-inner {
+	position: relative;
+	width: 600px;
+	height: 600px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-:root.theme-dark .clock-svg {
-	filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+.clock-svg-premium {
+	overflow: visible;
 }
 
-/* Main clock circle */
-.clock-main-circle {
-	fill: #ffffff;
-	stroke: #e0e0e0;
+/* Redesigned Clock Face (The Dome) */
+.clock-face {
+	stroke: none;
+	transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-:root.theme-dark .clock-main-circle {
-	fill: var(--bg-primary);
-	stroke: var(--border-medium);
+.clock-face:hover {
+	transform: scale(1.01);
 }
 
-/* Yelkovan (saniye ibresi) */
-.second-hand {
-	animation: none;
-	transform-origin: 50% 50%;
-	transform-box: fill-box;
-	stroke-linecap: round;
+/* Glass Ring / Background for segments */
+.glass-outer-ring {
+	fill: rgba(255, 255, 255, 0.1);
+	stroke: rgba(255, 255, 255, 0.2);
+	stroke-width: 1;
+	pointer-events: none;
 }
 
-/* Dış halka - silindir efekti */
-.outer-ring-shadow {
-	opacity: 0.5;
-	transition: opacity 0.2s ease;
+.routine-segment {
+	transition: all 0.3s ease;
+	stroke-width: 2;
+	stroke: rgba(255,255,255,0.1);
+	cursor: pointer;
+	filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
 }
 
-.outer-ring-light {
-	opacity: 0.85;
-	transition: opacity 0.2s ease;
+.routine-segment:hover {
+	filter: brightness(1.2) drop-shadow(0 0 15px rgba(255,255,255,0.4));
+	opacity: 1 !important;
 }
 
-.outer-ring-light:hover {
+/* Minimalist Labelling (Initially Hidden) */
+.clock-label {
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 500;
+	fill: rgba(0, 0, 0, 0.2);
+	user-select: none;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.clock-wrapper-inner:hover .clock-label {
 	opacity: 1;
-	filter: brightness(1.1);
 }
 
-@media (max-width: 600px) {
-	.clock-container {
-		max-width: 100%;
-		padding: 20px;
+@media (max-width: 768px) {
+	.clock-wrapper-inner {
+		width: 100%;
+		max-width: 450px;
+		height: auto;
+		aspect-ratio: 1/1;
 	}
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { RoutineBlock, Todo } from "../../types/models";
+import { Plus, CheckCircle2, Circle, X } from "lucide-react";
 import "./ActiveBlockTodos.css";
 
 interface ActiveBlockTodosProps {
@@ -23,72 +24,63 @@ export const ActiveBlockTodos: React.FC<ActiveBlockTodosProps> = ({
 		setNewTodoText("");
 	};
 
-	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleAddTodo();
-		}
-	};
-
 	if (!activeBlock) {
 		return (
-			<div className="active-block-todos">
-				<div className="todos-header">
-					<h3>Şu Andaki Görevler</h3>
-				</div>
-				<div className="todos-empty">
-					<p>Aktif zaman dilimi yok</p>
+			<div className="todos-container-minimal">
+				<div className="todos-empty-state">
+					<p>No active routine block at the moment.</p>
 				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="active-block-todos">
-			<div className="todos-header">
-				<h3 style={{ color: activeBlock.color }}>{activeBlock.title}</h3>
+		<div className="todos-container-minimal">
+			<div className="todos-header-focused">
+				<div className="status-dot-pulse" style={{ backgroundColor: activeBlock.color }} />
+				<h3>{activeBlock.title}</h3>
 			</div>
 
-			<div className="todos-input-section">
+			<div className="todo-input-premium">
 				<input
 					type="text"
-					placeholder="Yeni todo ekle..."
+					placeholder="What needs to be done?"
 					value={newTodoText}
 					onChange={(e) => setNewTodoText(e.target.value)}
-					onKeyPress={handleKeyPress}
-					className="todos-input"
+					onKeyPress={(e) => e.key === "Enter" && handleAddTodo()}
 				/>
-				<button onClick={handleAddTodo} className="btn-add-todo" title="Todo ekle">
-					+
+				<button onClick={handleAddTodo} className="add-todo-btn-inner">
+					<Plus size={18} />
 				</button>
 			</div>
 
-			{activeBlock.todos && activeBlock.todos.length > 0 ? (
-				<div className="todos-list">
-					{activeBlock.todos.map((todo: Todo) => (
-						<div key={todo.id} className="todo-item">
-							<input
-								type="checkbox"
-								checked={todo.completed}
-								onChange={() => onToggleTodo(activeBlock.id, todo.id)}
-								className="todo-checkbox"
-							/>
-							<span className={`todo-text ${todo.completed ? "completed" : ""}`}>{todo.text}</span>
-							<button
-								type="button"
-								className="btn-delete-todo"
-								onClick={() => onDeleteTodo(activeBlock.id, todo.id)}
-								title="Sil"
-							>
-								×
-							</button>
-						</div>
-					))}
-				</div>
-			) : (
-				<div className="todos-empty">
-					<p>Henüz todo yok</p>
-				</div>
-			)}
+			<div className="todo-scroll-area">
+				{activeBlock.todos && activeBlock.todos.length > 0 ? (
+					<div className="premium-todo-list">
+						{activeBlock.todos.map((todo: Todo) => (
+							<div key={todo.id} className={`premium-todo-item ${todo.completed ? 'completed' : ''}`}>
+								<button 
+									className="todo-toggle-btn"
+									onClick={() => onToggleTodo(activeBlock.id, todo.id)}
+								>
+									{todo.completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+								</button>
+								<span className="todo-label">{todo.text}</span>
+								<button
+									className="todo-remove-btn"
+									onClick={() => onDeleteTodo(activeBlock.id, todo.id)}
+								>
+									<X size={14} />
+								</button>
+							</div>
+						))}
+					</div>
+				) : (
+					<div className="todos-empty-state">
+						<p>No tasks added for this block yet.</p>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

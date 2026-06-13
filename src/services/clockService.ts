@@ -60,13 +60,7 @@ export const timeStringToMinutes = (timeStr: string): number => {
 /**
  * Calculate SVG path data for a block segment
  * Returns path data for an arc from startMinute to endMinute
- *
- * @param startMinute - Start time in minutes (0-1439)
- * @param endMinute - End time in minutes (0-1439)
- * @param radius - Outer radius of the arc
- * @param thickness - Thickness of the arc segment
- * @param centerX - X coordinate of circle center
- * @param centerY - Y coordinate of circle center
+ * Handles midnight crossover (e.g., 23:00 to 01:00)
  */
 export const getBlockArcPath = (
 	startMinute: number,
@@ -78,8 +72,14 @@ export const getBlockArcPath = (
 ): string => {
 	const innerRadius = radius - thickness;
 
+	// Calculate duration handling midnight crossover
+	let durationMinutes = endMinute - startMinute;
+	if (durationMinutes < 0) {
+		durationMinutes += 1440;
+	}
+
 	const startAngle = minutesToDegrees(startMinute) - 90; // -90 to start from top
-	const endAngle = minutesToDegrees(endMinute) - 90;
+	const endAngle = startAngle + minutesToDegrees(durationMinutes);
 
 	const startAngleRad = (startAngle * Math.PI) / 180;
 	const endAngleRad = (endAngle * Math.PI) / 180;
@@ -100,7 +100,7 @@ export const getBlockArcPath = (
 	const x4 = centerX + innerRadius * Math.cos(startAngleRad);
 	const y4 = centerY + innerRadius * Math.sin(startAngleRad);
 
-	const largeArc = endMinute - startMinute > 720 ? 1 : 0;
+	const largeArc = durationMinutes > 720 ? 1 : 0;
 
 	return [
 		`M ${x1} ${y1}`, // Move to outer start
@@ -109,6 +109,13 @@ export const getBlockArcPath = (
 		`A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4}`, // Inner arc (reverse)
 		"Z", // Close path
 	].join(" ");
+};
+
+/**
+ * Snap minutes to a specific interval (e.g., 5, 10, 15 minutes)
+ */
+export const snapToInterval = (minutes: number, interval: number = 15): number => {
+	return Math.round(minutes / interval) * interval;
 };
 
 /**
