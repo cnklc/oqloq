@@ -30,6 +30,12 @@
 	gap: 12px;
 }
 
+.pomodoro-header-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
 .pomodoro-mode {
 	display: flex;
 	align-items: center;

@@ -3,12 +3,18 @@
  * Fixed position timer in bottom-left corner
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { getPomodoroSettings, onPomodoroSettingsChange } from "../../services/pomodoroService";
+import {
+	requestNotificationPermission,
+	notifyTimerComplete,
+	isNotificationSupported,
+	getNotificationPermission,
+} from "../../services/notificationService";
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { isTimeInBlock } from "../../services/clockService";
-import { Play, Pause, RotateCcw, SkipForward, Maximize2, Minimize2, Target, Coffee, TreePalm } from "lucide-react";
+import { Play, Pause, RotateCcw, SkipForward, Maximize2, Minimize2, Target, Coffee, TreePalm, Bell, BellOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./PomodoroTimer.css";
 
@@ -56,34 +62,64 @@ export const PomodoroTimer: React.FC = () => {
 		});
 	}, [mode, getDuration]);
 
-	const handleTimerComplete = useCallback(() => {
-		setIsRunning(false);
-		if (mode === "work") {
-			const newCount = completedPomodoros + 1;
-			setCompletedPomodoros(newCount);
-			if (newCount % settings.longBreakInterval === 0) {
-				setMode("longBreak");
+	const handleTimerComplete = useCallback(
+		(auto: boolean = false) => {
+			setIsRunning(false);
+			let nextMode: TimerMode;
+			if (mode === "work") {
+				const newCount = completedPomodoros + 1;
+				setCompletedPomodoros(newCount);
+				nextMode = newCount % settings.longBreakInterval === 0 ? "longBreak" : "shortBreak";
 			} else {
-				setMode("shortBreak");
+				nextMode = "work";
 			}
-		} else {
-			setMode("work");
-		}
-	}, [mode, completedPomodoros, settings.longBreakInterval]);
+			setMode(nextMode);
+
+			// Only alert on a timer that actually ran out, not on a manual skip.
+			if (auto) {
+				const nextLabel = nextMode === "work" ? activeBlock?.title || "Focus" : "Break";
+				void notifyTimerComplete(mode, nextLabel);
+			}
+		},
+		[mode, completedPomodoros, settings.longBreakInterval, activeBlock]
+	);
+
+	// Timestamp-based countdown so the timer stays accurate while the tab is
+	// backgrounded (setInterval is throttled, but the deadline math still holds).
+	const endTimeRef = useRef<number | null>(null);
 
 	useEffect(() => {
-		if (!isRunning || timeLeft <= 0) return;
-		const interval = setInterval(() => {
-			setTimeLeft((prev) => {
-				if (prev <= 1) {
-					handleTimerComplete();
-					return 0;
-				}
-				return prev - 1;
-			});
-		}, 1000);
+		if (!isRunning) {
+			endTimeRef.current = null;
+			return;
+		}
+		endTimeRef.current = Date.now() + timeLeft * 1000;
+		const tick = () => {
+			const remaining = Math.max(0, Math.round(((endTimeRef.current ?? 0) - Date.now()) / 1000));
+			setTimeLeft(remaining);
+			if (remaining <= 0) {
+				handleTimerComplete(true);
+			}
+		};
+		const interval = setInterval(tick, 250);
 		return () => clearInterval(interval);
-	}, [isRunning, timeLeft, handleTimerComplete]);
+		// timeLeft is intentionally excluded: the deadline is captured once at start.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isRunning, handleTimerComplete]);
+
+	const [notifyPermission, setNotifyPermission] = useState<NotificationPermission>(() =>
+		getNotificationPermission()
+	);
+
+	const handleStart = useCallback(() => {
+		const next = !isRunning;
+		if (next) void requestNotificationPermission().then(setNotifyPermission);
+		setIsRunning(next);
+	}, [isRunning]);
+
+	const handleToggleNotifications = useCallback(() => {
+		void requestNotificationPermission().then(setNotifyPermission);
+	}, []);
 
 	const formatTime = (seconds: number): string => {
 		const mins = Math.floor(seconds / 60);
@@ -116,12 +152,28 @@ export const PomodoroTimer: React.FC = () => {
 						{isMinimized && <span className="minimized-time">{formatTime(timeLeft)}</span>}
 					</div>
 				</div>
-				<button
-					className="icon-btn-sm"
-					onClick={() => setIsMinimized(!isMinimized)}
-				>
-					{isMinimized ? <Maximize2 size={14} /> : <Minimize2 size={14} />}
-				</button>
+				<div className="pomodoro-header-actions">
+					{isNotificationSupported() && notifyPermission !== "granted" && (
+						<button
+							className="icon-btn-sm"
+							onClick={handleToggleNotifications}
+							title={
+								notifyPermission === "denied"
+									? "Notifications blocked — enable them in your browser/OS settings"
+									: "Enable completion notifications"
+							}
+							aria-label="Enable notifications"
+						>
+							{notifyPermission === "denied" ? <BellOff size={14} /> : <Bell size={14} />}
+						</button>
+					)}
+					<button
+						className="icon-btn-sm"
+						onClick={() => setIsMinimized(!isMinimized)}
+					>
+						{isMinimized ? <Maximize2 size={14} /> : <Minimize2 size={14} />}
+					</button>
+				</div>
 			</div>
 
 			<AnimatePresence>
@@ -149,13 +201,13 @@ export const PomodoroTimer: React.FC = () => {
 						</div>
 
 						<div className="pomodoro-controls">
-							<button className="ctrl-btn main" onClick={() => setIsRunning(!isRunning)}>
+							<button className="ctrl-btn main" onClick={handleStart}>
 								{isRunning ? <Pause size={20} /> : <Play size={20} fill="currentColor" />}
 							</button>
-							<button className="ctrl-btn" onClick={() => setTimeLeft(getDuration(mode))}>
+							<button className="ctrl-btn" onClick={() => { setIsRunning(false); setTimeLeft(getDuration(mode)); }}>
 								<RotateCcw size={18} />
 							</button>
-							<button className="ctrl-btn" onClick={handleTimerComplete}>
+							<button className="ctrl-btn" onClick={() => handleTimerComplete(false)}>
 								<SkipForward size={18} />
 							</button>
 						</div>
