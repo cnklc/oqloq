@@ -12,7 +12,19 @@ import {
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useAppearanceStore } from "../../hooks/useAppearanceStore";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
-import { X, Download, Upload, Trash2, Code, ExternalLink, Palette, RotateCcw, Timer, Pipette, Database } from "lucide-react";
+import {
+	X,
+	Download,
+	Upload,
+	Trash2,
+	Code,
+	ExternalLink,
+	Palette,
+	RotateCcw,
+	Timer,
+	Pipette,
+	Database,
+} from "lucide-react";
 import "./SettingsSidebar.css";
 
 const BG_PRESETS = [
@@ -30,7 +42,7 @@ const CLOCK_PRESETS = [
 	"#FFEB3B", // Vivid Yellow
 	"#E1F5FE", // Sky Blue
 	"#1C1C1E", // Dark Slate
-	"transparent" // Ghost mode
+	"transparent", // Ghost mode
 ];
 
 interface SettingsSidebarProps {
@@ -43,15 +55,15 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 	const [pomodoroSettings, setPomodoroSettings] = useState<PomodoroSettings>(() =>
 		getPomodoroSettings()
 	);
-	
-	const { 
-		backgroundColor, 
-		clockFaceColor, 
+
+	const {
+		backgroundColor,
+		clockFaceColor,
 		clockScale,
-		setBackgroundColor, 
-		setClockFaceColor, 
+		setBackgroundColor,
+		setClockFaceColor,
 		setClockScale,
-		resetAppearance 
+		resetAppearance,
 	} = useAppearanceStore();
 
 	const handlePomodoroSettingChange = (key: keyof PomodoroSettings, value: number) => {
@@ -71,7 +83,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `oqlock-backup-${new Date().toISOString().split('T')[0]}.json`;
+		a.download = `oqlock-backup-${new Date().toISOString().split("T")[0]}.json`;
 		a.click();
 		URL.revokeObjectURL(url);
 	};
@@ -111,7 +123,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							<Palette size={16} />
 							<h3>Appearance</h3>
 						</div>
-						
+
 						<div className="setting-item">
 							<div className="setting-item-header">
 								<label>Theme</label>
@@ -122,11 +134,11 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						<div className="setting-item">
 							<label>Background Color</label>
 							<div className="color-presets-grid">
-								{BG_PRESETS.map(c => (
-									<button 
+								{BG_PRESETS.map((c) => (
+									<button
 										key={c}
-										className={`preset-swatch ${backgroundColor === c ? 'active' : ''}`}
-										style={{ backgroundColor: c === 'transparent' ? 'rgba(0,0,0,0.05)' : c }}
+										className={`preset-swatch ${backgroundColor === c ? "active" : ""}`}
+										style={{ backgroundColor: c === "transparent" ? "rgba(0,0,0,0.05)" : c }}
 										onClick={() => setBackgroundColor(c)}
 										title={c}
 									/>
@@ -134,9 +146,9 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							</div>
 							<div className="color-picker-group">
 								<Pipette size={14} className="picker-icon" />
-								<input 
-									type="color" 
-									value={backgroundColor.startsWith('#') ? backgroundColor : '#ffffff'} 
+								<input
+									type="color"
+									value={backgroundColor.startsWith("#") ? backgroundColor : "#ffffff"}
 									onChange={(e) => setBackgroundColor(e.target.value)}
 									className="premium-color-input"
 								/>
@@ -147,11 +159,11 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						<div className="setting-item">
 							<label>Clock Face Color</label>
 							<div className="color-presets-grid">
-								{CLOCK_PRESETS.map(c => (
-									<button 
+								{CLOCK_PRESETS.map((c) => (
+									<button
 										key={c}
-										className={`preset-swatch ${clockFaceColor === c ? 'active' : ''}`}
-										style={{ backgroundColor: c === 'transparent' ? 'rgba(0,0,0,0.05)' : c }}
+										className={`preset-swatch ${clockFaceColor === c ? "active" : ""}`}
+										style={{ backgroundColor: c === "transparent" ? "rgba(0,0,0,0.05)" : c }}
 										onClick={() => setClockFaceColor(c)}
 										title={c}
 									/>
@@ -159,31 +171,31 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							</div>
 							<div className="color-picker-group">
 								<Pipette size={14} className="picker-icon" />
-								<input 
-									type="color" 
-									value={clockFaceColor.startsWith('#') ? clockFaceColor : '#ffffff'} 
+								<input
+									type="color"
+									value={clockFaceColor.startsWith("#") ? clockFaceColor : "#ffffff"}
 									onChange={(e) => setClockFaceColor(e.target.value)}
 									className="premium-color-input"
 								/>
 								<span className="color-hex-label">{clockFaceColor}</span>
 							</div>
 						</div>
-						
+
 						<div className="setting-item">
 							<label>Clock Size ({Math.round(clockScale * 100)}%)</label>
 							<div className="range-group">
-								<input 
-									type="range" 
-									min="0.5" 
-									max="1.5" 
+								<input
+									type="range"
+									min="0.5"
+									max="1.5"
 									step="0.05"
-									value={clockScale} 
+									value={clockScale}
 									onChange={(e) => setClockScale(parseFloat(e.target.value))}
 									className="premium-range-input"
 								/>
 							</div>
 						</div>
-						
+
 						<button className="btn-ghost-sm" onClick={resetAppearance}>
 							<RotateCcw size={14} /> Reset Appearance
 						</button>
@@ -199,9 +211,12 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							<div className="range-group">
 								<input
 									type="range"
-									min="1" max="90"
+									min="1"
+									max="90"
 									value={pomodoroSettings.workDuration}
-									onChange={(e) => handlePomodoroSettingChange("workDuration", Number(e.target.value))}
+									onChange={(e) =>
+										handlePomodoroSettingChange("workDuration", Number(e.target.value))
+									}
 									className="premium-range-input"
 								/>
 							</div>
@@ -211,9 +226,12 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							<div className="range-group">
 								<input
 									type="range"
-									min="1" max="30"
+									min="1"
+									max="30"
 									value={pomodoroSettings.shortBreak}
-									onChange={(e) => handlePomodoroSettingChange("shortBreak", Number(e.target.value))}
+									onChange={(e) =>
+										handlePomodoroSettingChange("shortBreak", Number(e.target.value))
+									}
 									className="premium-range-input"
 								/>
 							</div>
@@ -223,7 +241,8 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							<div className="range-group">
 								<input
 									type="range"
-									min="1" max="60"
+									min="1"
+									max="60"
 									value={pomodoroSettings.longBreak}
 									onChange={(e) => handlePomodoroSettingChange("longBreak", Number(e.target.value))}
 									className="premium-range-input"
@@ -246,7 +265,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 								<input type="file" hidden accept=".json" onChange={handleImport} />
 							</label>
 						</div>
-						
+
 						<button
 							className="btn-danger-outline"
 							onClick={() => {
@@ -265,9 +284,6 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						<div className="footer-links">
 							<a href="https://github.com/cnklc/oqloq" target="_blank" rel="noreferrer">
 								<Code size={16} /> Source
-							</a>
-							<a href="https://oqloq.life" target="_blank" rel="noreferrer">
-								<ExternalLink size={16} /> Website
 							</a>
 						</div>
 					</div>
