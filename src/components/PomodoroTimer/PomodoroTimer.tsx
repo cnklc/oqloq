@@ -34,7 +34,7 @@ export const PomodoroTimer: React.FC = () => {
 
 	const [mode, setMode] = useState<TimerMode>("work");
 	const [isRunning, setIsRunning] = useState(false);
-	const [isMinimized, setIsMinimized] = useState(false);
+	const [isMinimized, setIsMinimized] = useState(true);
 	const [completedPomodoros, setCompletedPomodoros] = useState(0);
 
 	const activeBlock = blocks.find((block) =>
@@ -148,6 +148,7 @@ export const PomodoroTimer: React.FC = () => {
 						{getModeIcon()}
 					</span>
 					<div className="mode-text-group">
+						<span className="pomodoro-title">Pomodoro</span>
 						<span className="mode-label">{mode === "work" ? (activeBlock?.title || "Focus") : "Break"}</span>
 						{isMinimized && <span className="minimized-time">{formatTime(timeLeft)}</span>}
 					</div>
