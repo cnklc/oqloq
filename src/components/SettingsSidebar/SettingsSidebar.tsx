@@ -18,7 +18,6 @@ import {
 	Upload,
 	Trash2,
 	Code,
-	ExternalLink,
 	Palette,
 	RotateCcw,
 	Timer,
