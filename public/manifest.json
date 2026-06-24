@@ -4,8 +4,8 @@
   "description": "A 24-hour Creative Routine Clock with Pomodoro timer.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#FFB4D6",
+  "background_color": "#FAF9F7",
+  "theme_color": "#FAF9F7",
   "icons": [
     {
       "src": "/vite.svg",

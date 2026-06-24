@@ -19,6 +19,14 @@ export const ThemeToggle: React.FC = () => {
 			root.classList.remove("theme-dark");
 			localStorage.setItem("oqlock-theme", "light");
 		}
+
+		// Keep the PWA/standalone title bar (theme-color) in sync with the page background.
+		const bg = getComputedStyle(root).getPropertyValue("--bg-primary").trim();
+		if (bg) {
+			document
+				.querySelector('meta[name="theme-color"]')
+				?.setAttribute("content", bg);
+		}
 	}, [isDark]);
 
 	return (
