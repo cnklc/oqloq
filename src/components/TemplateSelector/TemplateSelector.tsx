@@ -27,7 +27,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 			<div className="template-section">
 				<div className="section-title-group">
 					<Library size={16} />
-					<h3>Presets</h3>
+					<h3>Hazır Şablonlar</h3>
 				</div>
 				<div className="template-grid">
 					<AnimatePresence mode="popLayout">
@@ -43,7 +43,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 							>
 								<div className="template-info">
 									<span className="template-name">{template.name}</span>
-									<span className="template-meta">{template.blocks.length} blocks</span>
+									<span className="template-meta">{template.blocks.length} blok</span>
 								</div>
 								<div className="template-actions">
 									{currentTemplateId === template.id && (
@@ -59,7 +59,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 			<div className="template-section">
 				<div className="section-title-group">
 					<Library size={16} />
-					<h3>My Patterns</h3>
+					<h3>Desenlerim</h3>
 				</div>
 				<div className="template-grid">
 					<AnimatePresence mode="popLayout">
@@ -75,7 +75,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 							>
 								<div className="template-info">
 									<span className="template-name">{template.name}</span>
-									<span className="template-meta">{template.blocks.length} blocks</span>
+									<span className="template-meta">{template.blocks.length} blok</span>
 								</div>
 
 								<div className="template-actions">
@@ -86,7 +86,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 											className="delete-btn-sm"
 											onClick={(e) => {
 												e.stopPropagation();
-												if (confirm(`Delete "${template.name}"?`)) {
+												if (confirm(`"${template.name}" silinsin mi?`)) {
 													onTemplateDelete(template.id);
 												}
 											}}
@@ -99,7 +99,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 						))}
 					</AnimatePresence>
 					{customTemplates.length === 0 && (
-						<div className="template-empty">No custom patterns saved yet</div>
+						<div className="template-empty">Henüz özel desen kaydedilmedi</div>
 					)}
 				</div>
 			</div>

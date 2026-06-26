@@ -77,7 +77,7 @@ export const PomodoroTimer: React.FC = () => {
 
 			// Only alert on a timer that actually ran out, not on a manual skip.
 			if (auto) {
-				const nextLabel = nextMode === "work" ? activeBlock?.title || "Focus" : "Break";
+				const nextLabel = nextMode === "work" ? activeBlock?.title || "Odak" : "Mola";
 				void notifyTimerComplete(mode, nextLabel);
 			}
 		},
@@ -149,7 +149,7 @@ export const PomodoroTimer: React.FC = () => {
 					</span>
 					<div className="mode-text-group">
 						<span className="pomodoro-title">Pomodoro</span>
-						<span className="mode-label">{mode === "work" ? (activeBlock?.title || "Focus") : "Break"}</span>
+						<span className="mode-label">{mode === "work" ? (activeBlock?.title || "Odak") : "Mola"}</span>
 						{isMinimized && <span className="minimized-time">{formatTime(timeLeft)}</span>}
 					</div>
 				</div>
@@ -160,10 +160,10 @@ export const PomodoroTimer: React.FC = () => {
 							onClick={handleToggleNotifications}
 							title={
 								notifyPermission === "denied"
-									? "Notifications blocked — enable them in your browser/OS settings"
-									: "Enable completion notifications"
+									? "Bildirimler engellendi — tarayıcı/işletim sistemi ayarlarından etkinleştirin"
+									: "Tamamlanma bildirimlerini etkinleştir"
 							}
-							aria-label="Enable notifications"
+							aria-label="Bildirimleri etkinleştir"
 						>
 							{notifyPermission === "denied" ? <BellOff size={14} /> : <Bell size={14} />}
 						</button>
@@ -214,7 +214,7 @@ export const PomodoroTimer: React.FC = () => {
 						</div>
 						
 						<div className="pomodoro-stats-premium">
-							<span>Session {completedPomodoros + 1}</span>
+							<span>Oturum {completedPomodoros + 1}</span>
 						</div>
 					</motion.div>
 				)}

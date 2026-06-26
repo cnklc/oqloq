@@ -52,13 +52,13 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 		const endMinute = clampMinutes(timeStringToMinutes(endTime));
 
 		if (!title.trim()) {
-			alert("Please enter a title");
+			alert("Lütfen bir başlık girin");
 			return;
 		}
 
 		// End may be earlier than start (block crosses midnight), but it must not equal start.
 		if (startMinute === endMinute) {
-			alert("Start and end time cannot be the same");
+			alert("Başlangıç ve bitiş saati aynı olamaz");
 			return;
 		}
 
@@ -77,7 +77,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 			<div className="editor-header">
 				<div className="section-title-group">
 					<Plus size={18} />
-					<h3>{block ? "Edit Routine" : "New Routine"}</h3>
+					<h3>{block ? "Rutini Düzenle" : "Yeni Rutin"}</h3>
 				</div>
 				<button className="close-btn-sm" onClick={onCancel}><X size={20} /></button>
 			</div>
@@ -88,7 +88,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 						type="text"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						placeholder="What are you doing? (e.g. Deep Work)"
+						placeholder="Ne yapıyorsun? (örn. Derin Çalışma)"
 						className="title-input-large"
 						autoFocus
 					/>
@@ -96,7 +96,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 
 				<div className="time-row">
 					<div className="time-field">
-						<label>Start</label>
+						<label>Başlangıç</label>
 						<input
 							type="time"
 							value={startTime}
@@ -104,7 +104,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 						/>
 					</div>
 					<div className="time-field">
-						<label>End</label>
+						<label>Bitiş</label>
 						<input
 							type="time"
 							value={endTime}
@@ -114,7 +114,7 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 				</div>
 
 				<div className="color-section">
-					<label>Color Theme</label>
+					<label>Renk Teması</label>
 					<div className="premium-color-picker">
 						{COLOR_PALETTE.map((c) => (
 							<button
@@ -129,11 +129,11 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 				</div>
 
 				<div className="todo-section">
-					<label>Tasks</label>
+					<label>Görevler</label>
 					<div className="todo-input-minimal">
 						<input
 							type="text"
-							placeholder="Add a sub-task..."
+							placeholder="Alt görev ekle..."
 							value={newTodoText}
 							onChange={(e) => setNewTodoText(e.target.value)}
 							onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTodo())}
@@ -169,15 +169,15 @@ export const BlockEditor: React.FC<BlockEditorProps> = ({
 						<button
 							type="button"
 							className="btn-danger-ghost"
-							onClick={() => confirm("Delete this block?") && onDelete(block.id)}
+							onClick={() => confirm("Bu blok silinsin mi?") && onDelete(block.id)}
 						>
 							<Trash2 size={18} />
 						</button>
 					)}
 					<div className="footer-actions">
-						<button type="button" className="btn-outline" onClick={onCancel}>Cancel</button>
+						<button type="button" className="btn-outline" onClick={onCancel}>İptal</button>
 						<button type="submit" className="btn-premium">
-							{block ? "Update Block" : "Create Block"}
+							{block ? "Bloğu Güncelle" : "Blok Oluştur"}
 						</button>
 					</div>
 				</div>

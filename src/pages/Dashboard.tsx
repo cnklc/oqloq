@@ -76,14 +76,14 @@ export const Dashboard: React.FC = () => {
 
 	const handleSaveAsTemplate = () => {
 		if (!saveTemplateName.trim()) {
-			alert("Lütfen template adı girin");
+			alert("Lütfen şablon adı girin");
 			return;
 		}
 
 		saveCurrentAsTemplate(saveTemplateName.trim());
 		setShowSaveTemplate(false);
 		setSaveTemplateName("");
-		alert(`"${saveTemplateName}" template olarak kaydedildi!`);
+		alert(`"${saveTemplateName}" şablon olarak kaydedildi!`);
 	};
 
 	const handleAddTodo = (blockId: string, todoText: string) => {
@@ -177,7 +177,7 @@ export const Dashboard: React.FC = () => {
 						setIsLeftDrawerOpen(!isLeftDrawerOpen);
 						setIsRightDrawerOpen(false);
 					}}
-					title="Templates Library"
+					title="Şablon Kütüphanesi"
 				>
 					<Library size={20} />
 				</button>
@@ -188,14 +188,14 @@ export const Dashboard: React.FC = () => {
 						setIsRightDrawerOpen(!isRightDrawerOpen);
 						setIsLeftDrawerOpen(false);
 					}}
-					title="Current Tasks"
+					title="Mevcut Görevler"
 				>
 					<ListTodo size={20} />
 				</button>
 
 				<div className="nav-divider" />
 
-				<button className="nav-btn" onClick={() => setShowSettings(!showSettings)} title="Settings">
+				<button className="nav-btn" onClick={() => setShowSettings(!showSettings)} title="Ayarlar">
 					<Settings size={20} />
 				</button>
 			</nav>
@@ -239,7 +239,7 @@ export const Dashboard: React.FC = () => {
 
 							<div className="drawer-footer">
 								<button className="btn-premium w-full" onClick={() => setShowSaveTemplate(true)}>
-									<Save size={16} /> Save Pattern
+									<Save size={16} /> Deseni Kaydet
 								</button>
 							</div>
 						</motion.aside>
@@ -309,11 +309,11 @@ export const Dashboard: React.FC = () => {
 							>
 								<div className="section-title-group" style={{ marginBottom: 0 }}>
 									<Save size={18} />
-									<h3 style={{ margin: 0 }}>Save Template</h3>
+									<h3 style={{ margin: 0 }}>Şablon Kaydet</h3>
 								</div>
 								<input
 									type="text"
-									placeholder="Template Name"
+									placeholder="Şablon Adı"
 									value={saveTemplateName}
 									onChange={(e) => setSaveTemplateName(e.target.value)}
 									className="premium-input"
@@ -321,10 +321,10 @@ export const Dashboard: React.FC = () => {
 								/>
 								<div className="modal-actions">
 									<button className="btn-premium flex-1" onClick={handleSaveAsTemplate}>
-										Save
+										Kaydet
 									</button>
 									<button className="btn-ghost" onClick={() => setShowSaveTemplate(false)}>
-										Cancel
+										İptal
 									</button>
 								</div>
 							</motion.div>

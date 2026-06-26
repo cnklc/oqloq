@@ -28,7 +28,7 @@ export const ActiveBlockTodos: React.FC<ActiveBlockTodosProps> = ({
 		return (
 			<div className="todos-container-minimal">
 				<div className="todos-empty-state">
-					<p>No active routine block at the moment.</p>
+					<p>Şu anda aktif bir rutin bloğu yok.</p>
 				</div>
 			</div>
 		);
@@ -44,7 +44,7 @@ export const ActiveBlockTodos: React.FC<ActiveBlockTodosProps> = ({
 			<div className="todo-input-premium">
 				<input
 					type="text"
-					placeholder="What needs to be done?"
+					placeholder="Ne yapılması gerekiyor?"
 					value={newTodoText}
 					onChange={(e) => setNewTodoText(e.target.value)}
 					onKeyDown={(e) => e.key === "Enter" && handleAddTodo()}
@@ -77,7 +77,7 @@ export const ActiveBlockTodos: React.FC<ActiveBlockTodosProps> = ({
 					</div>
 				) : (
 					<div className="todos-empty-state">
-						<p>No tasks added for this block yet.</p>
+						<p>Bu blok için henüz görev eklenmedi.</p>
 					</div>
 				)}
 			</div>

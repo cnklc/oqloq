@@ -1,7 +1,7 @@
 {
-  "name": "Oqloq - 24-Hour Routine Clock",
+  "name": "Oqloq - 24 Saatlik Rutin Saati",
   "short_name": "Oqloq",
-  "description": "A 24-hour Creative Routine Clock with Pomodoro timer.",
+  "description": "Pomodoro zamanlayıcılı 24 saatlik yaratıcı rutin saati.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FAF9F7",

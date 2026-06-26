@@ -96,9 +96,9 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 				const data = JSON.parse(event.target?.result as string);
 				if (data.blocks) setBlocks(data.blocks);
 				if (data.templates) setTemplates(data.templates);
-				alert("Data imported successfully!");
+				alert("Veriler başarıyla içe aktarıldı!");
 			} catch {
-				alert("Failed to import: Invalid JSON file");
+				alert("İçe aktarma başarısız: Geçersiz JSON dosyası");
 			}
 		};
 		reader.readAsText(file);
@@ -110,8 +110,8 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 
 			<div className={`settings-sidebar glass-panel ${isOpen ? "open" : ""}`}>
 				<div className="settings-header">
-					<h2>Settings</h2>
-					<button className="icon-btn-sm" onClick={onClose} aria-label="Close">
+					<h2>Ayarlar</h2>
+					<button className="icon-btn-sm" onClick={onClose} aria-label="Kapat">
 						<X size={20} />
 					</button>
 				</div>
@@ -120,18 +120,18 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 					<div className="settings-section">
 						<div className="section-title-group">
 							<Palette size={16} />
-							<h3>Appearance</h3>
+							<h3>Görünüm</h3>
 						</div>
 
 						<div className="setting-item">
 							<div className="setting-item-header">
-								<label>Theme</label>
+								<label>Tema</label>
 								<ThemeToggle />
 							</div>
 						</div>
 
 						<div className="setting-item">
-							<label>Background Color</label>
+							<label>Arka Plan Rengi</label>
 							<div className="color-presets-grid">
 								{BG_PRESETS.map((c) => (
 									<button
@@ -156,7 +156,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						</div>
 
 						<div className="setting-item">
-							<label>Clock Face Color</label>
+							<label>Saat Kadranı Rengi</label>
 							<div className="color-presets-grid">
 								{CLOCK_PRESETS.map((c) => (
 									<button
@@ -181,7 +181,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						</div>
 
 						<div className="setting-item">
-							<label>Clock Size ({Math.round(clockScale * 100)}%)</label>
+							<label>Saat Boyutu ({Math.round(clockScale * 100)}%)</label>
 							<div className="range-group">
 								<input
 									type="range"
@@ -196,17 +196,17 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						</div>
 
 						<button className="btn-ghost-sm" onClick={resetAppearance}>
-							<RotateCcw size={14} /> Reset Appearance
+							<RotateCcw size={14} /> Görünümü Sıfırla
 						</button>
 					</div>
 
 					<div className="settings-section">
 						<div className="section-title-group">
 							<Timer size={16} />
-							<h3>Pomodoro Timer</h3>
+							<h3>Pomodoro Zamanlayıcı</h3>
 						</div>
 						<div className="setting-item">
-							<label>Work Duration ({pomodoroSettings.workDuration}m)</label>
+							<label>Çalışma Süresi ({pomodoroSettings.workDuration} dk)</label>
 							<div className="range-group">
 								<input
 									type="range"
@@ -221,7 +221,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							</div>
 						</div>
 						<div className="setting-item">
-							<label>Short Break ({pomodoroSettings.shortBreak}m)</label>
+							<label>Kısa Mola ({pomodoroSettings.shortBreak} dk)</label>
 							<div className="range-group">
 								<input
 									type="range"
@@ -236,7 +236,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 							</div>
 						</div>
 						<div className="setting-item">
-							<label>Long Break ({pomodoroSettings.longBreak}m)</label>
+							<label>Uzun Mola ({pomodoroSettings.longBreak} dk)</label>
 							<div className="range-group">
 								<input
 									type="range"
@@ -253,14 +253,14 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 					<div className="settings-section">
 						<div className="section-title-group">
 							<Database size={16} />
-							<h3>Data Management</h3>
+							<h3>Veri Yönetimi</h3>
 						</div>
 						<div className="data-actions">
 							<button className="btn-outline" onClick={handleExport}>
-								<Download size={16} /> Export JSON
+								<Download size={16} /> JSON Dışa Aktar
 							</button>
 							<label className="btn-outline cursor-pointer">
-								<Upload size={16} /> Import JSON
+								<Upload size={16} /> JSON İçe Aktar
 								<input type="file" hidden accept=".json" onChange={handleImport} />
 							</label>
 						</div>
@@ -268,13 +268,13 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						<button
 							className="btn-danger-outline"
 							onClick={() => {
-								if (confirm("Delete everything? This cannot be undone.")) {
+								if (confirm("Her şey silinsin mi? Bu işlem geri alınamaz.")) {
 									localStorage.clear();
 									window.location.reload();
 								}
 							}}
 						>
-							<Trash2 size={16} /> Reset All Data
+							<Trash2 size={16} /> Tüm Verileri Sıfırla
 						</button>
 					</div>
 
@@ -282,7 +282,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 						<p>Oqloq v1.1.0</p>
 						<div className="footer-links">
 							<a href="https://github.com/cnklc/oqloq" target="_blank" rel="noreferrer">
-								<Code size={16} /> Source
+								<Code size={16} /> Kaynak
 							</a>
 						</div>
 					</div>

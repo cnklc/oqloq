@@ -9,15 +9,15 @@
 type AlertKind = "work" | "shortBreak" | "longBreak";
 
 const NOTIFICATION_TITLES: Record<AlertKind, string> = {
-	work: "Focus session complete",
-	shortBreak: "Break over",
-	longBreak: "Long break over",
+	work: "Odak seansı tamamlandı",
+	shortBreak: "Mola bitti",
+	longBreak: "Uzun mola bitti",
 };
 
 const NOTIFICATION_BODIES: Record<AlertKind, string> = {
-	work: "Time for a break — step away for a moment.",
-	shortBreak: "Back to focus. Let's get going.",
-	longBreak: "Recharged? Time to focus again.",
+	work: "Mola zamanı — biraz uzaklaş.",
+	shortBreak: "Odaklanmaya geri dön. Hadi başlayalım.",
+	longBreak: "Dinlendin mi? Tekrar odaklanma zamanı.",
 };
 
 /**
@@ -105,7 +105,7 @@ export const notifyTimerComplete = async (
 
 	const title = NOTIFICATION_TITLES[completedMode];
 	const body = nextLabel
-		? `${NOTIFICATION_BODIES[completedMode]} Up next: ${nextLabel}.`
+		? `${NOTIFICATION_BODIES[completedMode]} Sıradaki: ${nextLabel}.`
 		: NOTIFICATION_BODIES[completedMode];
 
 	const options: NotificationOptions = {

@@ -35,11 +35,11 @@ export const COLOR_PALETTE = [
 export const DEFAULT_TEMPLATES: Template[] = [
 	{
 		id: "student",
-		name: "Student",
+		name: "Öğrenci",
 		blocks: [
 			{
 				id: "student-sleep-1",
-				title: "Sleep",
+				title: "Uyku",
 				color: "#A8D8FF",
 				startMinute: 0, // 00:00
 				endMinute: 480, // 08:00
@@ -47,7 +47,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "student-school",
-				title: "School",
+				title: "Okul",
 				color: "#FFD6A5",
 				startMinute: 480, // 08:00
 				endMinute: 960, // 16:00
@@ -55,7 +55,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "student-study",
-				title: "Study",
+				title: "Çalışma",
 				color: "#CAFFBF",
 				startMinute: 960, // 16:00
 				endMinute: 1200, // 20:00
@@ -63,7 +63,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "student-free",
-				title: "Free Time",
+				title: "Boş Zaman",
 				color: "#E0D5FF",
 				startMinute: 1200, // 20:00
 				endMinute: 1440, // 24:00
@@ -73,11 +73,11 @@ export const DEFAULT_TEMPLATES: Template[] = [
 	},
 	{
 		id: "professional",
-		name: "Professional",
+		name: "Profesyonel",
 		blocks: [
 			{
 				id: "pro-sleep",
-				title: "Sleep",
+				title: "Uyku",
 				color: "#A8D8FF",
 				startMinute: 0, // 00:00
 				endMinute: 420, // 07:00
@@ -85,7 +85,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "pro-deepwork",
-				title: "Deep Work",
+				title: "Derin Çalışma",
 				color: "#FFD6A5",
 				startMinute: 420, // 07:00
 				endMinute: 840, // 14:00
@@ -93,7 +93,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "pro-meetings",
-				title: "Meetings",
+				title: "Toplantılar",
 				color: "#CAFFBF",
 				startMinute: 840, // 14:00
 				endMinute: 1080, // 18:00
@@ -101,7 +101,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
 			},
 			{
 				id: "pro-personal",
-				title: "Personal Time",
+				title: "Kişisel Zaman",
 				color: "#E0D5FF",
 				startMinute: 1080, // 18:00
 				endMinute: 1440, // 24:00

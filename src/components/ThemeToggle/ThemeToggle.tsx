@@ -35,7 +35,7 @@ export const ThemeToggle: React.FC = () => {
 			whileTap={{ scale: 0.95 }}
 			className="theme-toggle-btn"
 			onClick={() => setIsDark(!isDark)}
-			aria-label="Toggle theme"
+			aria-label="Temayı değiştir"
 		>
 			<motion.div
 				initial={false}
