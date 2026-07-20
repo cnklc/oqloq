@@ -8,6 +8,7 @@ export interface PomodoroSettings {
 	shortBreak: number; // in minutes
 	longBreak: number; // in minutes
 	longBreakInterval: number; // after how many pomodoros
+	tickSound: boolean; // play the Swiss automatic watch tick while running
 }
 
 const POMODORO_SETTINGS_KEY = "pomodoroSettings";
@@ -18,6 +19,7 @@ const DEFAULT_SETTINGS: PomodoroSettings = {
 	shortBreak: 5,
 	longBreak: 15,
 	longBreakInterval: 4,
+	tickSound: false,
 };
 
 /**

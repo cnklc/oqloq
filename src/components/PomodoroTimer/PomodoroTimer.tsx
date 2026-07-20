@@ -14,6 +14,7 @@ import {
 import { useRoutineStore } from "../../hooks/useRoutineStore";
 import { useCurrentTime } from "../../hooks/useCurrentTime";
 import { isTimeInBlock } from "../../services/clockService";
+import { startWatchTick, stopWatchTick } from "../../services/watchTickService";
 import { Play, Pause, RotateCcw, SkipForward, Maximize2, Minimize2, Target, Coffee, TreePalm, Bell, BellOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./PomodoroTimer.css";
@@ -60,7 +61,11 @@ export const PomodoroTimer: React.FC = () => {
 			setTimeLeft(newDuration);
 			setIsRunning(false);
 		});
-	}, [mode, getDuration]);
+		// Re-run only on mode change or a *duration* setting change. Deliberately
+		// not tied to the whole settings object, so toggling the tick sound (or
+		// other non-duration settings) never resets or pauses a running timer.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mode, settings.workDuration, settings.shortBreak, settings.longBreak]);
 
 	const handleTimerComplete = useCallback(
 		(auto: boolean = false) => {
@@ -106,6 +111,17 @@ export const PomodoroTimer: React.FC = () => {
 		// timeLeft is intentionally excluded: the deadline is captured once at start.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isRunning, handleTimerComplete]);
+
+	// Play the Swiss automatic watch tick in the background while the timer runs,
+	// only when the user has enabled it. Always stop on pause/stop/unmount.
+	useEffect(() => {
+		if (isRunning && settings.tickSound) {
+			startWatchTick();
+		} else {
+			stopWatchTick();
+		}
+		return () => stopWatchTick();
+	}, [isRunning, settings.tickSound]);
 
 	const [notifyPermission, setNotifyPermission] = useState<NotificationPermission>(() =>
 		getNotificationPermission()

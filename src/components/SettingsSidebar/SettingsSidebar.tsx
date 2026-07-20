@@ -65,7 +65,10 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 		resetAppearance,
 	} = useAppearanceStore();
 
-	const handlePomodoroSettingChange = (key: keyof PomodoroSettings, value: number) => {
+	const handlePomodoroSettingChange = (
+		key: keyof PomodoroSettings,
+		value: number | boolean
+	) => {
 		const newSettings = { ...pomodoroSettings, [key]: value };
 		setPomodoroSettings(newSettings);
 		savePomodoroSettings(newSettings);
@@ -247,6 +250,26 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({ isOpen, onClos
 									className="premium-range-input"
 								/>
 							</div>
+						</div>
+						<div className="setting-item">
+							<div className="setting-item-header">
+								<label htmlFor="tick-sound-toggle">Saat Tıklaması Sesi</label>
+								<button
+									id="tick-sound-toggle"
+									type="button"
+									role="switch"
+									aria-checked={pomodoroSettings.tickSound}
+									className={`switch ${pomodoroSettings.tickSound ? "on" : ""}`}
+									onClick={() =>
+										handlePomodoroSettingChange("tickSound", !pomodoroSettings.tickSound)
+									}
+								>
+									<span className="switch-thumb" />
+								</button>
+							</div>
+							<p className="setting-hint">
+								Zamanlayıcı çalışırken arka planda İsviçre otomatik saat tıklaması çalar.
+							</p>
 						</div>
 					</div>
 
